@@ -1,0 +1,53 @@
+{
+  "name": "react-gql",
+  "version": "0.1.0-rc1",
+  "description": "a collection of helper functions to build a react app with redux and graphql",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/test/helper/babel-jest.js",
+    "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/react",
+      "<rootDir>/node_modules/react-dom",
+      "<rootDir>/node_modules/react-addons-test-utils",
+      "<rootDir>/node_modules/fbjs",
+      "<rootDir>/node_modules/core-js",
+      "<rootDir>/node_modules/graphql",
+      "<rootDir>/node_modules/isomorphic-fetch"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leeching/react-gql.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "graphql"
+  ],
+  "author": "Ching Lee <417300981@qq.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leeching/react-gql/issues"
+  },
+  "homepage": "https://github.com/leeching/react-gql#readme",
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "eslint": "^1.10.3",
+    "jest-cli": "^0.8.2",
+    "react": "^0.14.6",
+    "react-addons-test-utils": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "redux": "^3.0.5",
+    "redux-lego": "^0.1.0"
+  },
+  "dependencies": {
+    "graphql": "^0.4.14",
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
