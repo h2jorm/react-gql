@@ -1,28 +1,25 @@
-jest.dontMock('../post');
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
   renderIntoDocument,
 } from 'react-addons-test-utils';
 
-require('../helper/root');
-const Post = require('../post').Post;
+const Post = require('./helper/components/post').Post;
 
 describe('PostFragmentContainer', () => {
-  let post, postNode;
+  let postData, post, postNode;
   beforeEach(() => {
-    const _post = {
+    postData = {
       id: '1',
       content: 'hello world',
       likes: 2
     };
     post = renderIntoDocument(
-      <Post post={_post} />
+      <Post post={postData} />
     );
     postNode = ReactDOM.findDOMNode(post);
   });
-  it('should contains like button', () => {
-    expect(postNode.querySelector('button').textContent).toBe('like');
+  it('should have props `post`', () => {
+    expect(Post.getChildren().props.post).toEqual(postData);
   });
 });

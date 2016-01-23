@@ -1,5 +1,5 @@
 import React from 'react';
-import {fragment} from '../../src/index';
+import {fragment} from '../../../src';
 
 class Post extends React.Component {
   static defaultProps = {
@@ -16,8 +16,8 @@ class Post extends React.Component {
   }
   render() {
     return (
-      <li className={style.postContainer}>
-        <span className="content">
+      <li>
+        <span>
           {this.props.post.content}
         </span>
         <button

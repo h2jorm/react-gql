@@ -1,6 +1,6 @@
 import React from 'react';
 import {Post} from './post';
-import {branch} from '../../src/index';
+import {branch} from '../../../src';
 
 class List extends React.Component {
   static defaultProps = {
