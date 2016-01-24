@@ -2,7 +2,7 @@ import React from 'react';
 import {Post} from './post';
 import {branch} from '../../../src';
 
-class List extends React.Component {
+class OriginList extends React.Component {
   static defaultProps = {
     posts: []
   };
@@ -25,7 +25,7 @@ class List extends React.Component {
   }
 }
 
-exports.List = datahub.branch(List, {
+export const branchOpts = {
   getState: state => ({
     posts: state.blog.posts
   }),
@@ -51,4 +51,6 @@ exports.List = datahub.branch(List, {
       action: 'blogLikeAll'
     }
   }
-});
+};
+
+export const List = branch(OriginList, branchOpts);

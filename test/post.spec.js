@@ -5,9 +5,6 @@ import {
   Simulate,
 } from 'react-addons-test-utils';
 import {
-  getMutations,
-} from '../src/container';
-import {
   OriginPost,
   Post,
   fragmentOpts,
@@ -21,7 +18,7 @@ beforeEach(() => {
   conf = {
     communicate: function () {}
   };
-  spyOn(conf, 'communicate');
+  spyOn(conf, 'communicate').and.callThrough();
   config({store, actions, communicate: conf.communicate});
 });
 

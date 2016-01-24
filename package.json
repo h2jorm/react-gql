@@ -36,11 +36,12 @@
     "karma-chrome-launcher": "^0.2.2",
     "karma-jasmine": "^0.3.6",
     "karma-webpack": "^1.7.0",
+    "lodash": "^4.0.0",
     "react": "^0.14.6",
     "react-addons-test-utils": "^0.14.6",
     "react-dom": "^0.14.6",
     "redux": "^3.0.5",
-    "redux-lego": "^0.1.0",
+    "redux-lego": "^0.1.1",
     "webpack": "^1.12.12"
   },
   "dependencies": {
