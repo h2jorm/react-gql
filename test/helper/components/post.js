@@ -1,7 +1,7 @@
 import React from 'react';
 import {fragment} from '../../../src';
 
-class Post extends React.Component {
+export class OriginPost extends React.Component {
   static defaultProps = {
     post: {
       content: '',
@@ -33,7 +33,7 @@ class Post extends React.Component {
   }
 }
 
-exports.Post = fragment(Post, {
+export const fragmentOpts = {
   fragment: `
     fragment post on Post {
       id, content, likes
@@ -51,4 +51,6 @@ exports.Post = fragment(Post, {
       action: 'blogLike',
     }
   }
-});
+};
+
+export const Post = fragment(OriginPost, fragmentOpts);

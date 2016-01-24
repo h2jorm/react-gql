@@ -1,5 +1,5 @@
 import React from 'react';
-const {fetch} = require('./fetch');
+import {fetch} from './fetch';
 import {parse} from 'graphql/language';
 import {register} from './middleware';
 
@@ -9,6 +9,8 @@ let store, actions;
 export function config(args) {
   store = args.store;
   actions = args.actions;
+  if (args.communicate)
+    communicate = args.communicate;
 };
 
 // wrap a smart react component with optional init query
@@ -35,10 +37,7 @@ export function branch(reactComponent, opts) {
     componentDidMount() {
       if (!opts.init)
         return;
-      const {action, query, variables} = opts.init;
-      fetch(query, resolveMayBeFn(variables)).then(data => {
-        store.dispatch(actions[action](data));
-      });
+      communicate(opts.init);
     }
     render() {
       const {mutations} = opts;
@@ -78,14 +77,12 @@ export function fragment(reactComponent, opts) {
  * @param mutations {Object<query: QLString, action: ReduxActionString>}
  * @return mutations {Object<Function>}
  */
-function getMutations(mutations) {
+export function getMutations(mutations) {
   let result = {};
   Object.keys(mutations).forEach(name => {
     result[name] = (variables = null) => {
       const {query, action} = mutations[name];
-      return fetch(query, variables).then(data => {
-        store.dispatch(actions[action](data));
-      });
+      return communicate({query, variables, action});
     };
   });
   return result;
@@ -112,6 +109,13 @@ function unpackFragment(fragment) {
     result.push(selection.name.value);
   });
   return result.join();
+}
+
+function communicate(opts) {
+  const {query, variables, action} = opts;
+  return fetch(query, resolveMayBeFn(variables)).then(data => {
+    store.dispatch(actions[action](data));
+  });
 }
 
 // execute function and then return result
