@@ -17,8 +17,8 @@ export function config(args) {
 export function branch(reactComponent, opts) {
   let Children;
   function connect(reactComponentInstance) {
-    return function () {
-      reactComponentInstance.setState(reactComponentInstance.getStoreData());
+    return function (store) {
+      reactComponentInstance.setState(reactComponentInstance.getStoreData(store));
     };
   }
   return class DataHubBranchContainer extends React.Component {
@@ -27,17 +27,27 @@ export function branch(reactComponent, opts) {
     };
     constructor() {
       super();
-      this.state = this.getStoreData();
-      register(connect(this));
+      this.state = this.getStoreData(store);
     }
-    getStoreData() {
+    getStoreData(store) {
       const {getState} = opts;
       return getState(store.getState());
     }
+    // connect component state with store
+    componentWillMount() {
+      this.disconnect = register(connect(this));
+    }
+    // initial query
     componentDidMount() {
       if (!opts.init)
         return;
       communicate(opts.init);
+    }
+    // disconnect component state with store
+    componentWillUnmount() {
+      const {disconnect} = this;
+      if (disconnect && typeof disconnect === 'function')
+        disconnect();
     }
     render() {
       const {mutations} = opts;
