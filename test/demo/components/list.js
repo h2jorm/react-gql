@@ -1,6 +1,7 @@
 import React from 'react';
 import {Post} from './post';
-import {branch} from '../../../src';
+import {branch} from '#/src';
+import {store, actions} from '../store';
 
 class OriginList extends React.Component {
   static defaultProps = {
@@ -8,6 +9,9 @@ class OriginList extends React.Component {
   };
   likeAll() {
     this.props.mutations.likeAll();
+  }
+  reset() {
+    store.dispatch(actions.blogReset());
   }
   render() {
     return (
@@ -20,6 +24,7 @@ class OriginList extends React.Component {
           }
         </ul>
         <button onClick={::this.likeAll}>like all</button>
+        <button onClick={::this.reset}>reset</button>
       </div>
     );
   }
@@ -37,7 +42,7 @@ export const branchOpts = {
         }
       }
     `,
-    action: 'blogInit',
+    action: actions.blogInit,
   },
   mutations: {
     likeAll: {
@@ -48,7 +53,7 @@ export const branchOpts = {
           }
         }
       `,
-      action: 'blogLikeAll'
+      action: actions.blogLikeAll
     }
   }
 };

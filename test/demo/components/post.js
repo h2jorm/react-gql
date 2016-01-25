@@ -1,5 +1,6 @@
 import React from 'react';
-import {fragment} from '../../../src';
+import {fragment} from '#/src';
+import {actions} from '../store';
 
 export class OriginPost extends React.Component {
   static defaultProps = {
@@ -48,7 +49,7 @@ export const fragmentOpts = {
           }
         }
       `,
-      action: 'blogLike',
+      action: actions.blogLike,
     }
   }
 };

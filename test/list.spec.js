@@ -5,53 +5,86 @@ import {
   renderIntoDocument,
   Simulate,
 } from 'react-addons-test-utils';
+
+import {store} from './demo/store';
+import {set} from '#/src';
+import {
+  prepare,
+  resetStore,
+} from './helper';
+
 import {
   List,
   branchOpts,
-} from './helper/components/list';
+} from './demo/components/list';
 
-import {config} from '../src';
-import {store, actions} from './helper/store';
 
-let conf;
-const posts = [
+const getPosts = () => ([
   {id: '1', content: 'hello world', likes: 1},
   {id: '2', content: 'hello react', likes: 2},
   {id: '3', content: 'hello graphql', likes: 3}
-];
-beforeEach(() => {
-  conf = {
-    communicate: function ({query, action, variables}) {
-      if (query === branchOpts.init.query)
-        return store.dispatch(actions[action]({posts}));
-    }
-  };
-  spyOn(conf, 'communicate').and.callThrough();
-  config({store, actions, communicate: conf.communicate});
-});
+]);
 
 describe('ListBranch', () => {
-  let list, listNode;
+  let conf, list, listNode;
+  beforeAll(prepare);
   beforeEach(() => {
+    conf = {
+      communicate: function ({query, action, variables}) {
+        if (query === branchOpts.init.query) {
+          return store.dispatch(action({posts: getPosts()}));
+        }
+        if (query === branchOpts.mutations.likeAll.query) {
+          return store.dispatch(action(null));
+        }
+      }
+    };
+    spyOn(conf, 'communicate').and.callThrough();
+    set({communicate: conf.communicate});
+  });
+  beforeEach(() => {
+    resetStore();
     list = renderIntoDocument(
       <List />
     );
     listNode = ReactDOM.findDOMNode(list);
   });
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(listNode.parentNode);
+  });
   it('should have props `posts`', () => {
-    expect(List.getChildren().props.posts).toEqual(posts);
+    expect(List.getChildren().props.posts).toEqual(getPosts());
   });
   it('should have props `mutations`', () => {
     const mutations = List.getChildren().props.mutations;
     expect(Object.keys(mutations)).toEqual(['likeAll']);
   });
   it('should trigger likeAll mutation', () => {
+    clickLikeAllBtn();
+    expect(pickLikeNums()).toEqual(['2', '3', '4']);
+    clickLikeAllBtn();
+    expect(pickLikeNums()).toEqual(['3', '4', '5']);
+  });
+
+  function pickLikeNums() {
+    const likes = [];
+    _.forEach(listNode.querySelectorAll('li'), li => {
+      likes.push(li.lastElementChild.textContent);
+    });
+    return likes;
+  }
+  function clickLikeAllBtn() {
     const btns = listNode.querySelectorAll('button');
     let likeAllBtn = _.find(btns, btn => {
-      return btn.textContent === 'like all'
+      return btn.textContent === 'like all';
     });
     Simulate.click(likeAllBtn);
-    const args = Object.assign({variables: null}, branchOpts.mutations.likeAll);
-    expect(conf.communicate.calls.argsFor(1)).toEqual([args]);
-  });
+  }
+  function clickResetBtn() {
+    const btns = listNode.querySelectorAll('button');
+    let resetBtn = _.find(btns, btn => {
+      return btn.textContent === 'reset';
+    });
+    Simulate.click(resetBtn);
+  }
 });

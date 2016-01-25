@@ -4,32 +4,38 @@ import {
   renderIntoDocument,
   Simulate,
 } from 'react-addons-test-utils';
+
+import {store} from './demo/store';
+import {set} from '#/src';
+import {
+  prepare,
+  resetStore,
+} from './helper';
+
 import {
   OriginPost,
   Post,
   fragmentOpts,
-} from './helper/components/post';
+} from './demo/components/post';
 
-import {config} from '../src';
-import {store, actions} from './helper/store';
-
-let conf;
-beforeEach(() => {
-  conf = {
-    communicate: function () {}
-  };
-  spyOn(conf, 'communicate').and.callThrough();
-  config({store, actions, communicate: conf.communicate});
-});
+const postData = {
+  id: '1',
+  content: 'hello world',
+  likes: 2
+};
 
 describe('PostFragment', () => {
-  let postData, post, postNode;
+  let conf, post, postNode;
+  beforeAll(prepare);
   beforeEach(() => {
-    postData = {
-      id: '1',
-      content: 'hello world',
-      likes: 2
+    conf = {
+      communicate: function () {}
     };
+    spyOn(conf, 'communicate').and.callThrough();
+    set({communicate: conf.communicate});
+  });
+  beforeEach(() => {
+    resetStore();
     post = renderIntoDocument(
       <Post post={postData} />
     );

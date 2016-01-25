@@ -40,6 +40,7 @@ module.exports = {
         };
       };
       yield (state, action) => {
+        // console.log('reducer:likeAll', state.posts);
         let posts = [];
         state.posts.map(post => {
           post.likes = ++post.likes;
@@ -48,5 +49,14 @@ module.exports = {
         return Object.assign({}, state, {posts});
       };
     },
+    reset: function *() {
+      yield type => () => ({type});
+      yield (state, action) => {
+        // console.log('reducer:reset', state.posts);
+        return {
+          posts: []
+        };
+      };
+    }
   }
 };
