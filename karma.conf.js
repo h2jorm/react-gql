@@ -1,5 +1,6 @@
 // Karma configuration
 // Generated on Sat Jan 23 2016 20:17:09 GMT+0800 (CST)
+const path = require('path')
 
 module.exports = function(config) {
   config.set({
@@ -33,6 +34,11 @@ module.exports = function(config) {
 
     webpack: {
       devtool: 'inline-source-map',
+      resolve: {
+        alias: {
+          '#': path.resolve()
+        }
+      },
       module: {
         loaders: [
           {
