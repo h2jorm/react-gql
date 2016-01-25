@@ -4,11 +4,12 @@ import {set} from '#/src';
 
 Gql.set({
   store,
-  communicate,
+  fetchAndDispatch,
 });
 
 // custom communication strategy
-function communicate({query, variables = null, action}) {
+function fetchAndDispatch({query, variables = null, action}) {
+  variables = resolveMayBeFn(variables);
   return fetch('/graphql', {
     method: 'post',
     headers: {

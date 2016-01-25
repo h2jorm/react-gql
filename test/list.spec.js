@@ -30,7 +30,7 @@ describe('ListBranch', () => {
   beforeAll(prepare);
   beforeEach(() => {
     conf = {
-      communicate: function ({query, action, variables}) {
+      fetchAndDispatch: function ({query, action, variables}) {
         if (query === branchOpts.init.query) {
           return store.dispatch(action({posts: getPosts()}));
         }
@@ -39,8 +39,8 @@ describe('ListBranch', () => {
         }
       }
     };
-    spyOn(conf, 'communicate').and.callThrough();
-    set({communicate: conf.communicate});
+    spyOn(conf, 'fetchAndDispatch').and.callThrough();
+    set({fetchAndDispatch: conf.fetchAndDispatch});
   });
   beforeEach(() => {
     resetStore();

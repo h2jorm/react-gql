@@ -29,10 +29,10 @@ describe('PostFragment', () => {
   beforeAll(prepare);
   beforeEach(() => {
     conf = {
-      communicate: function () {}
+      fetchAndDispatch: function () {}
     };
-    spyOn(conf, 'communicate').and.callThrough();
-    set({communicate: conf.communicate});
+    spyOn(conf, 'fetchAndDispatch').and.callThrough();
+    set({fetchAndDispatch: conf.fetchAndDispatch});
   });
   beforeEach(() => {
     resetStore();
@@ -53,6 +53,6 @@ describe('PostFragment', () => {
     const args = Object.assign({}, fragmentOpts.mutations.like, {
       variables: {id: '1'}
     });
-    expect(conf.communicate).toHaveBeenCalledWith(args);
+    expect(conf.fetchAndDispatch).toHaveBeenCalledWith(args);
   });
 });

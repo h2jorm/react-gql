@@ -3,14 +3,14 @@ import {parse} from 'graphql/language';
 import {register} from './middleware';
 
 let store;
-let communicate = function () {};
+let fetchAndDispatch = function () {};
 
 export function set(opts) {
   if (opts.store)
     store = opts.store;
-  if (opts.communicate && typeof opts.communicate === 'function')
-    communicate = function (...args) {
-      return opts.communicate(...args);
+  if (opts.fetchAndDispatch && typeof opts.fetchAndDispatch === 'function')
+    fetchAndDispatch = function (...args) {
+      return opts.fetchAndDispatch(...args);
     };
 };
 
@@ -19,7 +19,6 @@ export function branch(reactComponent, opts) {
   let Children;
   function connect(reactComponentInstance) {
     return function (store) {
-      // console.log('connect', store.getState().blog.posts)
       reactComponentInstance.setState(reactComponentInstance.getStoreData(store));
     };
   }
@@ -43,7 +42,7 @@ export function branch(reactComponent, opts) {
     componentDidMount() {
       if (!opts.init)
         return;
-      communicate(opts.init);
+      fetchAndDispatch(opts.init);
     }
     // disconnect component state with store
     componentWillUnmount() {
@@ -94,7 +93,7 @@ function getMutations(mutations) {
   Object.keys(mutations).forEach(name => {
     result[name] = (variables = null) => {
       const {query, action} = mutations[name];
-      return communicate({query, variables, action});
+      return fetchAndDispatch({query, variables, action});
     };
   });
   return result;
