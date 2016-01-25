@@ -42,7 +42,7 @@ export function branch(reactComponent, opts) {
     componentDidMount() {
       if (!opts.init)
         return;
-      fetchAndDispatch(opts.init);
+      parseMutation(opts.init)();
     }
     // disconnect component state with store
     componentWillUnmount() {
@@ -91,12 +91,19 @@ export function fragment(reactComponent, opts) {
 function getMutations(mutations) {
   let result = {};
   Object.keys(mutations).forEach(name => {
-    result[name] = (variables = null) => {
-      const {query, action} = mutations[name];
-      return fetchAndDispatch({query, variables, action});
-    };
+    result[name] = parseMutation(mutations[name]);
   });
   return result;
+}
+
+function parseMutation({query, variables, action}) {
+  return (inputVariables) => {
+    return fetchAndDispatch({
+      query,
+      variables: inputVariables || variables || null,
+      action,
+    });
+  };
 }
 
 /**
