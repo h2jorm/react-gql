@@ -42,7 +42,7 @@ export const branchOpts = {
         }
       }
     `,
-    action: actions.blogInit,
+    action: 'blogInit',
   },
   mutations: {
     likeAll: {
@@ -53,7 +53,7 @@ export const branchOpts = {
           }
         }
       `,
-      action: actions.blogLikeAll
+      action: 'blogLikeAll'
     }
   }
 };

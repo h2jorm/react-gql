@@ -49,7 +49,7 @@ export const fragmentOpts = {
           }
         }
       `,
-      action: actions.blogLike,
+      action: 'blogLike',
     }
   }
 };

@@ -6,7 +6,7 @@ import {
   Simulate,
 } from 'react-addons-test-utils';
 
-import {store} from './demo/store';
+import {store, actions} from './demo/store';
 import {set} from '#/src';
 import {
   prepare,
@@ -32,10 +32,10 @@ describe('ListBranch', () => {
     conf = {
       fetchAndDispatch: function ({query, action, variables}) {
         if (query === branchOpts.init.query) {
-          return store.dispatch(action({posts: getPosts()}));
+          return store.dispatch(actions[action]({posts: getPosts()}));
         }
         if (query === branchOpts.mutations.likeAll.query) {
-          return store.dispatch(action(null));
+          return store.dispatch(actions[action](null));
         }
       }
     };
@@ -53,10 +53,10 @@ describe('ListBranch', () => {
     ReactDOM.unmountComponentAtNode(listNode.parentNode);
   });
   it('should have props `posts`', () => {
-    expect(List.getChildren().props.posts).toEqual(getPosts());
+    expect(List.latestChildren().props.posts).toEqual(getPosts());
   });
   it('should have props `mutations`', () => {
-    const mutations = List.getChildren().props.mutations;
+    const mutations = List.latestChildren().props.mutations;
     expect(Object.keys(mutations)).toEqual(['likeAll']);
   });
   it('should trigger likeAll mutation', () => {

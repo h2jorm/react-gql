@@ -16,15 +16,15 @@ export function set(opts) {
 
 // wrap a smart react component with optional init query
 export function branch(reactComponent, opts) {
-  let Children;
+  let latestChildren;
   function connect(reactComponentInstance) {
     return function (store) {
       reactComponentInstance.setState(reactComponentInstance.getStoreData(store));
     };
   }
   return class DataHubBranchContainer extends React.Component {
-    static getChildren() {
-      return Children;
+    static latestChildren() {
+      return latestChildren;
     };
     constructor() {
       super();
@@ -57,20 +57,20 @@ export function branch(reactComponent, opts) {
           mutations: getMutations(mutations)
         });
       }
-      return Children = React.createElement(reactComponent, this.state);
+      return latestChildren = React.createElement(reactComponent, this.state);
     }
   };
 };
 
 // wrap a dummy react component with fragment definition
 export function fragment(reactComponent, opts) {
-  let Children;
+  let latestChildren;
   return class DataHubFragmentContainer extends React.Component {
     static getFragment() {
       return unpackFragment(opts.fragment);
     };
-    static getChildren() {
-      return Children;
+    static latestChildren() {
+      return latestChildren;
     };
     render() {
       const {mutations} = opts;
@@ -78,7 +78,7 @@ export function fragment(reactComponent, opts) {
         ...this.props,
         mutations: getMutations(mutations)
       };
-      return Children = React.createElement(reactComponent, props);
+      return latestChildren = React.createElement(reactComponent, props);
     }
   };
 };

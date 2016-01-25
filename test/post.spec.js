@@ -42,17 +42,15 @@ describe('PostFragment', () => {
     postNode = ReactDOM.findDOMNode(post);
   });
   it('should have props `post`', () => {
-    expect(Post.getChildren().props.post).toEqual(postData);
+    expect(Post.latestChildren().props.post).toEqual(postData);
   });
   it('should have props `mutations`', () => {
-    const mutations = Post.getChildren().props.mutations;
+    const mutations = Post.latestChildren().props.mutations;
     expect(Object.keys(mutations)).toEqual(['like']);
   });
-  it('should trigger like mutation', () => {
+  it('should be able to dispatch `blogLike` mutation', () => {
     Simulate.click(postNode.querySelector('button'));
-    const args = Object.assign({}, fragmentOpts.mutations.like, {
-      variables: {id: '1'}
-    });
-    expect(conf.fetchAndDispatch).toHaveBeenCalledWith(args);
+    const {action} = conf.fetchAndDispatch.calls.argsFor(0)[0];
+    expect(action).toBe('blogLike');
   });
 });
