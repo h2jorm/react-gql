@@ -42,7 +42,7 @@ export function branch(reactComponent, opts) {
     componentDidMount() {
       if (!opts.init)
         return;
-      parseMutation(opts.init)();
+      parseGqlUnit(opts.init)();
     }
     // disconnect component state with store
     componentWillUnmount() {
@@ -85,18 +85,18 @@ export function fragment(reactComponent, opts) {
 
 /**
  * @description transform an object of mutation config to an object of mutation function
- * @param mutations {Object<query: QLString, action: ReduxActionString>}
+ * @param gqlUnits {Object<query: QLString, action: ReduxActionString, variables: Object|Function>}
  * @return mutations {Object<Function>}
  */
-function getMutations(mutations) {
+function getMutations(gqlUnits) {
   let result = {};
-  Object.keys(mutations).forEach(name => {
-    result[name] = parseMutation(mutations[name]);
+  Object.keys(gqlUnits).forEach(name => {
+    result[name] = parseGqlUnit(gqlUnits[name]);
   });
   return result;
 }
 
-function parseMutation({query, variables, action}) {
+function parseGqlUnit({query, variables, action}) {
   return (inputVariables) => {
     return fetchAndDispatch({
       query,
