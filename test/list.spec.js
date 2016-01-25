@@ -26,6 +26,7 @@ const getPosts = () => ([
 ]);
 
 describe('ListBranch', () => {
+
   let conf, list, listNode;
   beforeAll(prepare);
   beforeEach(() => {
@@ -52,24 +53,33 @@ describe('ListBranch', () => {
   afterEach(() => {
     ReactDOM.unmountComponentAtNode(listNode.parentNode);
   });
-  it('should have props `posts`', () => {
+  
+  it('should launch an initial query after initial rendering', () => {
+    expect(conf.fetchAndDispatch.calls.argsFor(0)[0].action).toBe('blogInit');
+  });
+  describe('children', () => {
+    it('should have props `mutations`', () => {
+      const mutations = List.latestChildren().props.mutations;
+      expect(Object.keys(mutations)).toEqual(['likeAll']);
+    });
+    it('should be able to dispatch `likeAll` mutation', () => {
+      clickLikeAllBtn();
+      expect(conf.fetchAndDispatch.calls.argsFor(1)[0].action).toBe('blogLikeAll');
+    });
+  });
+  it('should update props of children component automatically when store changes', () => {
+    // initial query
     expect(List.latestChildren().props.posts).toEqual(getPosts());
-  });
-  it('should have props `mutations`', () => {
-    const mutations = List.latestChildren().props.mutations;
-    expect(Object.keys(mutations)).toEqual(['likeAll']);
-  });
-  it('should trigger likeAll mutation', () => {
+    // mutation
+    expect(pickLikeNums(List.latestChildren().props.posts)).toEqual([1, 2, 3]);
     clickLikeAllBtn();
-    expect(pickLikeNums()).toEqual(['2', '3', '4']);
-    clickLikeAllBtn();
-    expect(pickLikeNums()).toEqual(['3', '4', '5']);
+    expect(pickLikeNums(List.latestChildren().props.posts)).toEqual([2, 3, 4]);
   });
 
-  function pickLikeNums() {
+  function pickLikeNums(posts) {
     const likes = [];
-    _.forEach(listNode.querySelectorAll('li'), li => {
-      likes.push(li.lastElementChild.textContent);
+    posts.forEach(post => {
+      likes.push(post.likes);
     });
     return likes;
   }
@@ -79,12 +89,5 @@ describe('ListBranch', () => {
       return btn.textContent === 'like all';
     });
     Simulate.click(likeAllBtn);
-  }
-  function clickResetBtn() {
-    const btns = listNode.querySelectorAll('button');
-    let resetBtn = _.find(btns, btn => {
-      return btn.textContent === 'reset';
-    });
-    Simulate.click(resetBtn);
   }
 });

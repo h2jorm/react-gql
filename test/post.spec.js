@@ -25,6 +25,7 @@ const postData = {
 };
 
 describe('PostFragment', () => {
+
   let conf, post, postNode;
   beforeAll(prepare);
   beforeEach(() => {
@@ -41,16 +42,22 @@ describe('PostFragment', () => {
     );
     postNode = ReactDOM.findDOMNode(post);
   });
-  it('should have props `post`', () => {
-    expect(Post.latestChildren().props.post).toEqual(postData);
+
+  it('should be accessable to fragment content', () => {
+    expect(Post.getFragment()).toBe('id,content,likes');
   });
-  it('should have props `mutations`', () => {
-    const mutations = Post.latestChildren().props.mutations;
-    expect(Object.keys(mutations)).toEqual(['like']);
-  });
-  it('should be able to dispatch `blogLike` mutation', () => {
-    Simulate.click(postNode.querySelector('button'));
-    const {action} = conf.fetchAndDispatch.calls.argsFor(0)[0];
-    expect(action).toBe('blogLike');
+  describe('children', () => {
+    it('should have props `post`', () => {
+      expect(Post.latestChildren().props.post).toEqual(postData);
+    });
+    it('should have props `mutations`', () => {
+      const mutations = Post.latestChildren().props.mutations;
+      expect(Object.keys(mutations)).toEqual(['like']);
+    });
+    it('should be able to dispatch `blogLike` mutation', () => {
+      Simulate.click(postNode.querySelector('button'));
+      const {action} = conf.fetchAndDispatch.calls.argsFor(0)[0];
+      expect(action).toBe('blogLike');
+    });
   });
 });
