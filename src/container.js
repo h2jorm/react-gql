@@ -1,40 +1,54 @@
 import React from 'react';
-const {fetch} = require('./fetch');
 import {parse} from 'graphql/language';
 import {register} from './middleware';
 
-let store, actions;
+let store;
+let fetchAndDispatch = function () {};
 
-// config store and actions
-export function config(args) {
-  store = args.store;
-  actions = args.actions;
+export function set(opts) {
+  if (opts.store)
+    store = opts.store;
+  if (opts.fetchAndDispatch && typeof opts.fetchAndDispatch === 'function')
+    fetchAndDispatch = function (...args) {
+      return opts.fetchAndDispatch(...args);
+    };
 };
 
 // wrap a smart react component with optional init query
 export function branch(reactComponent, opts) {
+  let latestChildren;
   function connect(reactComponentInstance) {
-    return function () {
-      reactComponentInstance.setState(reactComponentInstance.getStoreData());
+    return function (store) {
+      reactComponentInstance.setState(reactComponentInstance.getStoreData(store));
     };
   }
   return class DataHubBranchContainer extends React.Component {
+    static latestChildren() {
+      return latestChildren;
+    };
     constructor() {
       super();
-      this.state = this.getStoreData();
-      register(connect(this));
+      this.state = this.getStoreData(store);
     }
-    getStoreData() {
+    getStoreData(store) {
       const {getState} = opts;
       return getState(store.getState());
     }
+    // connect component state with store
+    componentWillMount() {
+      this.disconnect = register(connect(this));
+    }
+    // initial query
     componentDidMount() {
       if (!opts.init)
         return;
-      const {action, query, variables} = opts.init;
-      fetch(query, resolveMayBeFn(variables)).then(data => {
-        store.dispatch(actions[action](data));
-      });
+      parseGqlUnit(opts.init)();
+    }
+    // disconnect component state with store
+    componentWillUnmount() {
+      const {disconnect} = this;
+      if (disconnect && typeof disconnect === 'function')
+        disconnect();
     }
     render() {
       const {mutations} = opts;
@@ -43,16 +57,20 @@ export function branch(reactComponent, opts) {
           mutations: getMutations(mutations)
         });
       }
-      return React.createElement(reactComponent, this.state);
+      return latestChildren = React.createElement(reactComponent, this.state);
     }
   };
 };
 
 // wrap a dummy react component with fragment definition
 export function fragment(reactComponent, opts) {
+  let latestChildren;
   return class DataHubFragmentContainer extends React.Component {
     static getFragment() {
       return unpackFragment(opts.fragment);
+    };
+    static latestChildren() {
+      return latestChildren;
     };
     render() {
       const {mutations} = opts;
@@ -60,27 +78,32 @@ export function fragment(reactComponent, opts) {
         ...this.props,
         mutations: getMutations(mutations)
       };
-      return React.createElement(reactComponent, props);
+      return latestChildren = React.createElement(reactComponent, props);
     }
   };
 };
 
 /**
  * @description transform an object of mutation config to an object of mutation function
- * @param mutations {Object<query: QLString, action: ReduxActionString>}
+ * @param gqlUnits {Object<query: QLString, action: ReduxActionString, variables: Object|Function>}
  * @return mutations {Object<Function>}
  */
-function getMutations(mutations) {
+function getMutations(gqlUnits) {
   let result = {};
-  Object.keys(mutations).forEach(name => {
-    result[name] = (variables = null) => {
-      const {query, action} = mutations[name];
-      return fetch(query, variables).then(data => {
-        store.dispatch(actions[action](data));
-      });
-    };
+  Object.keys(gqlUnits).forEach(name => {
+    result[name] = parseGqlUnit(gqlUnits[name]);
   });
   return result;
+}
+
+function parseGqlUnit({query, variables, action}) {
+  return (inputVariables) => {
+    return fetchAndDispatch({
+      query,
+      variables: inputVariables || variables || null,
+      action,
+    });
+  };
 }
 
 /**
@@ -104,10 +127,4 @@ function unpackFragment(fragment) {
     result.push(selection.name.value);
   });
   return result.join();
-}
-
-// execute function and then return result
-// or return origin value
-function resolveMayBeFn(fn) {
-  return typeof fn === 'function' ? fn() : fn;
 }

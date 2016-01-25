@@ -1,13 +1,9 @@
-import {connect} from './middleware';
-import {
-  config,
-  fragment,
+export {
+  set,
   branch,
+  fragment,
 } from './container';
 
-module.exports = {
+export {
   connect,
-  config,
-  fragment,
-  branch,
-};
+} from './middleware';
