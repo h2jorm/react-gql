@@ -1,16 +1,17 @@
 import React from 'react';
-import {fetch} from './fetch';
 import {parse} from 'graphql/language';
 import {register} from './middleware';
 
-let store, actions;
+let store;
+let communicate = function () {};
 
-// config store and actions
-export function config(args) {
-  store = args.store;
-  actions = args.actions;
-  if (args.communicate)
-    communicate = args.communicate;
+export function set(opts) {
+  if (opts.store)
+    store = opts.store;
+  if (opts.communicate && typeof opts.communicate === 'function')
+    communicate = function (...args) {
+      return opts.communicate(...args);
+    };
 };
 
 // wrap a smart react component with optional init query
@@ -18,6 +19,7 @@ export function branch(reactComponent, opts) {
   let Children;
   function connect(reactComponentInstance) {
     return function (store) {
+      // console.log('connect', store.getState().blog.posts)
       reactComponentInstance.setState(reactComponentInstance.getStoreData(store));
     };
   }
@@ -87,7 +89,7 @@ export function fragment(reactComponent, opts) {
  * @param mutations {Object<query: QLString, action: ReduxActionString>}
  * @return mutations {Object<Function>}
  */
-export function getMutations(mutations) {
+function getMutations(mutations) {
   let result = {};
   Object.keys(mutations).forEach(name => {
     result[name] = (variables = null) => {
@@ -119,17 +121,4 @@ function unpackFragment(fragment) {
     result.push(selection.name.value);
   });
   return result.join();
-}
-
-function communicate(opts) {
-  const {query, variables, action} = opts;
-  return fetch(query, resolveMayBeFn(variables)).then(data => {
-    store.dispatch(actions[action](data));
-  });
-}
-
-// execute function and then return result
-// or return origin value
-function resolveMayBeFn(fn) {
-  return typeof fn === 'function' ? fn() : fn;
 }
