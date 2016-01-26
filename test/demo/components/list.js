@@ -1,6 +1,6 @@
 import React from 'react';
 import {Post} from './post';
-import {branch} from '#/src';
+import Gql from '#/src';
 import {store, actions} from '../store';
 
 class OriginList extends React.Component {
@@ -58,4 +58,4 @@ export const branchOpts = {
   }
 };
 
-export const List = branch(OriginList, branchOpts);
+export const List = Gql.Branch(OriginList, branchOpts);

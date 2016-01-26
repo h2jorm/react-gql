@@ -1,9 +1,16 @@
-export {
+import {
   set,
-  branch,
-  fragment,
+  Branch,
+  Fragment,
 } from './container';
 
-export {
+import {
   connect,
 } from './middleware';
+
+module.exports = {
+  set,
+  Branch,
+  Fragment,
+  connect,
+};

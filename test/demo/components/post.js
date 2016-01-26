@@ -1,5 +1,5 @@
 import React from 'react';
-import {fragment} from '#/src';
+import Gql from '#/src';
 import {actions} from '../store';
 
 export class OriginPost extends React.Component {
@@ -54,4 +54,4 @@ export const fragmentOpts = {
   }
 };
 
-export const Post = fragment(OriginPost, fragmentOpts);
+export const Post = Gql.Fragment(OriginPost, fragmentOpts);

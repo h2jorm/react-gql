@@ -15,7 +15,7 @@ export function set(opts) {
 };
 
 // wrap a smart react component with optional init query
-export function branch(reactComponent, opts) {
+export function Branch(reactComponent, opts) {
   let latestChildren;
   function connect(reactComponentInstance) {
     return function (store) {
@@ -63,7 +63,7 @@ export function branch(reactComponent, opts) {
 };
 
 // wrap a dummy react component with fragment definition
-export function fragment(reactComponent, opts) {
+export function Fragment(reactComponent, opts) {
   let latestChildren;
   return class GqlFragmentContainer extends React.Component {
     static getFragment() {

@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import {store, actions} from './store';
-import {set} from '#/src';
+import Gql from '#/src';
 
 Gql.set({
   store,

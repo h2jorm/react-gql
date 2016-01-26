@@ -22,11 +22,11 @@ Different from `react-relay`, `react-gql` is not a full-featured framework but a
 Set `store` and `fetchAndDispatch` before rendering react components. It is assumed that a redux store is ready.
 
 ```js
-import gql from 'react-gql';
+import Gql from 'react-gql';
 import {store} from './store';
 import fetch from 'isomorphic-fetch';
 
-gql.set({
+Gql.set({
   store,
   fetchAndDispatch,
 });
@@ -67,12 +67,12 @@ function fetchAndDispatch({query, variables = null, action}) {
 };
 ```
 
-### branch
-`gql.branch` method takes a `ReactClass` and returns a new `ReactClass` that contains the original one. The original `ReactClass` will receive props provided from the new one.
+### Branch
+`Gql.Branch` method takes a `ReactClass` and returns a new `ReactClass` that contains the original one. The original `ReactClass` will receive props provided from the new one.
 
 ```js
 import React from 'react';
-import gql from 'react-gql';
+import Gql from 'react-gql';
 import actions from './actions';
 
 class List extends React.Component {
@@ -102,7 +102,7 @@ class List extends React.Component {
   }
 }
 
-export const ListBranch = Gql.branch(List, {
+export const ListBranch = Gql.Branch(List, {
   // connect data from store to `this.props` of `List`
   getState: state => ({
     post: state.posts
@@ -139,15 +139,15 @@ export const ListBranch = Gql.branch(List, {
 });
 ```
 
-### fragment
-Components wrapped by `gql.branch` is considered smart components. They launch initial query and connect state from store.
+### Fragment
+Components wrapped by `Gql.Branch` is considered smart components. They launch initial query and connect state from store.
 
-However, components wrapped by `gql.fragment` is considered dummy components. They are able to declare data structure but receive data only from `props`. And, of course, no initial query.
+However, components wrapped by `Gql.Fragment` is considered dummy components. They are able to declare data structure but receive data only from `props`. And, of course, no initial query.
 
 ```js
 // src/components/Post.js
 import React from 'react';
-import gql from 'react-gql';
+import Gql from 'react-gql';
 import actions from './actions';
 
 class Post extends React.Component {
@@ -179,7 +179,7 @@ class Post extends React.Component {
   }
 }
 
-export const PostFragment = gql.fragment(Post, {
+export const PostFragment = Gql.Fragment(Post, {
   fragment: `
     fragment post on Post {
       id, content, likes
@@ -203,7 +203,7 @@ export const PostFragment = gql.fragment(Post, {
 
 // src/components/List.js
 import React from 'react';
-import gql from 'react-gql';
+import Gql from 'react-gql';
 import actions from './actions';
 
 import PostFragment from './Post';
@@ -225,7 +225,7 @@ class List extends React.Component {
   }
 }
 
-export const ListBranch = gql.branch(List, {
+export const ListBranch = Gql.Branch(List, {
   getState: state => ({
     posts: state.blog.posts
   }),
@@ -244,7 +244,7 @@ export const ListBranch = gql.branch(List, {
 ```
 
 ### connect
-`gql.connect` is a redux middleware responsible for updating state when store changes. Compared with the implementation of `react-redux`, it is more convenient to add a middleware when creating a store.
+`Gql.connect` is a redux middleware responsible for updating state when store changes. Compared with the implementation of `react-redux`, it is more convenient to add a middleware when creating a store.
 
 When a `GqlBranchContainer` `componentDidMount`, a connection function will be registered in the middleware. Every time store changes, all registered connection functions will be executed one by one. When `componentWillUnmount`, the connection function will be canceled.
 
@@ -269,4 +269,4 @@ export const store = createStoreWithMiddleware(
 The following items are on plan:
 
 * merge initial queries of `GqlBranchContainer` components
-* `gql.fragment` supports nested data structure
+* `Gql.Fragment` supports nested data structure
