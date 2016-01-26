@@ -1,13 +1,16 @@
-import {connect} from './middleware';
 import {
-  config,
-  fragment,
-  branch,
+  set,
+  Branch,
+  Fragment,
 } from './container';
 
-module.exports = {
+import {
   connect,
-  config,
-  fragment,
-  branch,
+} from './middleware';
+
+module.exports = {
+  set,
+  Branch,
+  Fragment,
+  connect,
 };
