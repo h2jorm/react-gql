@@ -109,6 +109,7 @@ export const ListBranch = Gql.Branch(List, {
   }),
   // `init' is a gql unit
   // When `componentDidMount`, `fetchAndDispatch` function will be executed with this gql unit.
+  // `init` is optional
   init: {
     query: `
       query($date: String!) {
@@ -140,9 +141,9 @@ export const ListBranch = Gql.Branch(List, {
 ```
 
 ### Fragment
-Components wrapped by `Gql.Branch` is considered smart components. They launch initial query and connect state from store.
+Components wrapped by `Gql.Branch` is considered smart components. They sync states with redux store.
 
-However, components wrapped by `Gql.Fragment` is considered dummy components. They are able to declare data structure but receive data only from `props`. And, of course, no initial query.
+However, components wrapped by `Gql.Fragment` is considered dummy components. They are able to declare data structure but receive data only from `props`.
 
 ```js
 // src/components/Post.js
@@ -274,25 +275,29 @@ export const store = createStoreWithMiddleware(
 import Gql from 'react-gql';
 import Post from './Post';// Post is a `ReactClass`
 
-Gql.Fragment(Post, {
+Post = Gql.Fragment(Post, {
   fragment: `
     fragment post on Post {
       id,
       content,
       likes,
       editor {
-        id, name
+        ...Editor
       }
     }
-  `,
-  mutations: {
-    // a collection of gql units
-  }
+    fragment editor on Editor {
+      id, name
+    }
+  `
 });
+
+Post.getFragment(); // 'id,content,likes,editor{id,name}'
+Post.getFragment('post'); // 'id,content,likes,editor{id,name}'
+Post.getFragment('editor'); // 'id,name'
 ```
 
 ## Roadmap
 The following items are on plan:
 
 * merge initial queries of `GqlBranchContainer` components
-* `Gql.Fragment` supports nested data structure
+* print formatted query string in dev environment
