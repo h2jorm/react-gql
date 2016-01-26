@@ -2,8 +2,9 @@
   "name": "react-gql",
   "version": "0.1.0-rc1",
   "description": "a collection of helper functions to build a react app with redux and graphql",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "build": "rm -rf lib && babel src --out-dir lib --presets es2015,stage-0",
     "test": "karma start",
     "lint": "eslint src test"
   },

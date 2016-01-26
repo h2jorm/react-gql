@@ -22,7 +22,7 @@ export function branch(reactComponent, opts) {
       reactComponentInstance.setState(reactComponentInstance.getStoreData(store));
     };
   }
-  return class DataHubBranchContainer extends React.Component {
+  return class GqlBranchContainer extends React.Component {
     static latestChildren() {
       return latestChildren;
     };
@@ -65,7 +65,7 @@ export function branch(reactComponent, opts) {
 // wrap a dummy react component with fragment definition
 export function fragment(reactComponent, opts) {
   let latestChildren;
-  return class DataHubFragmentContainer extends React.Component {
+  return class GqlFragmentContainer extends React.Component {
     static getFragment() {
       return unpackFragment(opts.fragment);
     };
