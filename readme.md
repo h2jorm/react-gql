@@ -265,6 +265,32 @@ export const store = createStoreWithMiddleware(
 );
 ```
 
+## Advanced
+
+### Nested fragment
+`Gql.Fragment` supports nested fragment declare.
+
+```js
+import Gql from 'react-gql';
+import Post from './Post';// Post is a `ReactClass`
+
+Gql.Fragment(Post, {
+  fragment: `
+    fragment post on Post {
+      id,
+      content,
+      likes,
+      editor {
+        id, name
+      }
+    }
+  `,
+  mutations: {
+    // a collection of gql units
+  }
+});
+```
+
 ## Roadmap
 The following items are on plan:
 

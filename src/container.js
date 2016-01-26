@@ -1,6 +1,6 @@
 import React from 'react';
-import {parse} from 'graphql/language';
 import {register} from './middleware';
+import {getFragment} from './fragmentParser';
 
 let store;
 let fetchAndDispatch = function () {};
@@ -67,7 +67,7 @@ export function Fragment(reactComponent, opts) {
   let latestChildren;
   return class GqlFragmentContainer extends React.Component {
     static getFragment() {
-      return unpackFragment(opts.fragment);
+      return getFragment(opts.fragment);
     };
     static latestChildren() {
       return latestChildren;
@@ -104,27 +104,4 @@ function parseGqlUnit({query, variables, action}) {
       action,
     });
   };
-}
-
-/**
- * @description parse a graphql fragment
- * @param fragment {String}
- * @return fragmentContent {String}
- * @example
- * ```js
- * const fragment = `
- *   fragment post on Post {
- *     id, content, likes
- *   }
- * `;
- * expect(unpackFragment(fragment)).toBe('id, content, likes');// true
- * ```
- */
-function unpackFragment(fragment) {
-  const documentAST = parse(fragment);
-  let result = [];
-  documentAST.definitions[0].selectionSet.selections.forEach(selection => {
-    result.push(selection.name.value);
-  });
-  return result.join();
 }
