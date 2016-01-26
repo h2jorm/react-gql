@@ -275,25 +275,29 @@ export const store = createStoreWithMiddleware(
 import Gql from 'react-gql';
 import Post from './Post';// Post is a `ReactClass`
 
-Gql.Fragment(Post, {
+Post = Gql.Fragment(Post, {
   fragment: `
     fragment post on Post {
       id,
       content,
       likes,
       editor {
-        id, name
+        ...Editor
       }
     }
-  `,
-  mutations: {
-    // a collection of gql units
-  }
+    fragment editor on Editor {
+      id, name
+    }
+  `
 });
+
+Post.getFragment(); // 'id,content,likes,editor{id,name}'
+Post.getFragment('post'); // 'id,content,likes,editor{id,name}'
+Post.getFragment('editor'); // 'id,name'
 ```
 
 ## Roadmap
 The following items are on plan:
 
 * merge initial queries of `GqlBranchContainer` components
-* `Gql.Fragment` supports nested data structure
+* print formatted query string in dev environment
