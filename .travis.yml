@@ -13,5 +13,6 @@ deploy:
   on:
     tags: true
     repo: leeching/react-gql
+  skip_cleanup: true
 before_deploy:
   - npm run build
