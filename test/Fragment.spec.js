@@ -16,7 +16,7 @@ import {
   OriginPost,
   Post,
   fragmentOpts,
-} from './demo/components/post';
+} from './demo/components/Post';
 
 const postData = {
   id: '1',
@@ -24,7 +24,7 @@ const postData = {
   likes: 2
 };
 
-describe('PostFragment', () => {
+describe('Fragment', () => {
 
   let conf, post, postNode;
   beforeAll(prepare);

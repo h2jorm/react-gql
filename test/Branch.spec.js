@@ -16,7 +16,7 @@ import {
 import {
   List,
   branchOpts,
-} from './demo/components/list';
+} from './demo/components/List';
 
 
 const getPosts = () => ([
@@ -25,7 +25,7 @@ const getPosts = () => ([
   {id: '3', content: 'hello graphql', likes: 3}
 ]);
 
-describe('ListBranch', () => {
+describe('Branch', () => {
 
   let conf, list, listNode;
   beforeAll(prepare);
@@ -53,7 +53,7 @@ describe('ListBranch', () => {
   afterEach(() => {
     ReactDOM.unmountComponentAtNode(listNode.parentNode);
   });
-  
+
   it('should launch an initial query after initial rendering', () => {
     expect(conf.fetchAndDispatch.calls.argsFor(0)[0].action).toBe('blogInit');
   });
