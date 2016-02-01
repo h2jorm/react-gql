@@ -296,6 +296,37 @@ Post.getFragment('post'); // 'id,content,likes,editor{id,name}'
 Post.getFragment('editor'); // 'id,name'
 ```
 
+### Deliver props
+It is possible to deliver props from `Branch` component to wrapped component.
+
+```js
+import {
+  renderIntoDocument,
+} from 'react-addons-test-utils';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Gql from 'react-gql';
+class Hello extends React.Component {
+  render() {
+    return (
+      <div>Hello, {this.props.name}</div>
+    );
+  }
+}
+Hello = Gql.Branch(Hello, {
+  getProps: props => {
+    const {name} = props;
+    return {name};
+  }
+});
+const hello = renderIntoDocument(
+  <Hello name="world" />
+);
+const helloNode = ReactDOM.findDOMNode(hello);
+expect(helloNode.textContent).toBe('Hello, world'); // true
+```
+
+
 ## Roadmap
 The following items are on plan:
 

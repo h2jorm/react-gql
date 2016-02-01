@@ -31,7 +31,7 @@ export function Branch(reactComponent, opts) {
       this.state = this.getStoreData(store);
     }
     getStoreData(store) {
-      const {getState} = opts;
+      const {getState = () => ({})} = opts;
       return getState(store.getState());
     }
     // connect component state with store
@@ -51,7 +51,9 @@ export function Branch(reactComponent, opts) {
         disconnect();
     }
     render() {
-      const {mutations} = opts;
+      const {mutations, getProps} = opts;
+      if (getProps)
+        Object.assign(this.state, getProps(this.props));
       if (mutations) {
         Object.assign(this.state, {
           mutations: getMutations(mutations)
@@ -88,7 +90,7 @@ export function Fragment(reactComponent, opts) {
  * @param gqlUnits {Object<query: QLString, action: ReduxActionString, variables: Object|Function>}
  * @return mutations {Object<Function>}
  */
-function getMutations(gqlUnits) {
+function getMutations(gqlUnits = {}) {
   let result = {};
   Object.keys(gqlUnits).forEach(name => {
     result[name] = parseGqlUnit(gqlUnits[name]);
