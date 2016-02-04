@@ -325,10 +325,3 @@ const hello = renderIntoDocument(
 const helloNode = ReactDOM.findDOMNode(hello);
 expect(helloNode.textContent).toBe('Hello, world'); // true
 ```
-
-
-## Roadmap
-The following items are on plan:
-
-* merge initial queries of `GqlBranchContainer` components
-* print formatted query string in dev environment

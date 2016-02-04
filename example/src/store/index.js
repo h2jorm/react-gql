@@ -4,13 +4,16 @@ import {
   combineReducers,
   applyMiddleware,
 } from 'redux';
+import createLogger from 'redux-logger';
 import Gql from '../react-gql';
 import {genActionsAndReducers} from 'redux-lego';
 
 import blog from './blog';
 
+let logger = createLogger();
 let createStoreWithMiddleware = applyMiddleware(
-  Gql.connect
+  Gql.connect,
+  logger
 )(createStore);
 
 export const {actions, reducers} = genActionsAndReducers(

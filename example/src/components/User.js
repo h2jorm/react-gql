@@ -16,16 +16,10 @@ class User extends React.Component {
   }
 }
 
-export default Gql.Branch(User, {
-  getState: state => ({
-    user: state.blog.user
-  }),
-  init: {
-    query: `
-      query {
-        user {name, city, age}
-      }
-    `,
-    action: 'blogUserInfo'
-  },
+export default Gql.Fragment(User, {
+  fragment: `
+    fragment user on User {
+      name, city, age
+    }
+  `
 });

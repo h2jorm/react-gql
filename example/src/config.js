@@ -22,7 +22,9 @@ function fetchAndDispatch({query, variables = null, action}) {
     }),
   }).then(res => {
     return res.json().then(data => {
-      store.dispatch(actions[action](data.data));
+      resolveMayBeArray(action, function (action) {
+        store.dispatch(actions[action](data.data));
+      });
     });
   });
 };
@@ -31,4 +33,10 @@ function fetchAndDispatch({query, variables = null, action}) {
 // or return origin value
 function resolveMayBeFn(fn) {
   return typeof fn === 'function' ? fn() : fn;
+}
+
+function resolveMayBeArray(array, fn) {
+  if (!Array.isArray(array))
+    array = [array];
+  array.forEach(item => fn(item));
 }
