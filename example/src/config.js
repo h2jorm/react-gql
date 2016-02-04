@@ -5,6 +5,7 @@ import Gql from './react-gql';
 Gql.set({
   store,
   fetchAndDispatch,
+  logger: true,
 });
 
 // custom communication strategy

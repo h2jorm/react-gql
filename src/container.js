@@ -1,9 +1,11 @@
 import React from 'react';
 import {register} from './middleware';
 import {getFragment} from './fragmentParser';
+import logger from './logger';
 
 let store;
 let fetchAndDispatch = function () {};
+let isLogger = false;
 
 export function set(opts) {
   if (opts.store)
@@ -12,6 +14,8 @@ export function set(opts) {
     fetchAndDispatch = function (...args) {
       return opts.fetchAndDispatch(...args);
     };
+  if (opts.logger)
+    isLogger = !!opts.logger;
 };
 
 // wrap a smart react component with optional init query
@@ -93,13 +97,20 @@ export function Fragment(reactComponent, opts) {
 function getMutations(gqlUnits = {}) {
   let result = {};
   Object.keys(gqlUnits).forEach(name => {
-    result[name] = parseGqlUnit(gqlUnits[name]);
+    result[name] = parseGqlUnit(
+      Object.assign(gqlUnits[name], {
+        type: 'mutation'
+      })
+    );
   });
   return result;
 }
 
-function parseGqlUnit({query, variables, action}) {
+function parseGqlUnit(opts) {
+  const {query, variables, action, type} = opts;
   return (inputVariables) => {
+    if (isLogger)
+      logger(opts);
     return fetchAndDispatch({
       query,
       variables: inputVariables || variables || null,
