@@ -1,7 +1,8 @@
 module.exports = {
   name: 'blog',
   defaultState: {
-    posts: []
+    posts: [],
+    user: {}
   },
   mutation: {
     init: function *() {
@@ -15,6 +16,18 @@ module.exports = {
           posts: action.posts
         });
       };
-    }
+    },
+    userInfo: function *() {
+      yield type => {
+        return ({user}) => {
+          return {type, user};
+        };
+      };
+      yield (state, action) => {
+        return Object.assign({}, state, {
+          user: action.user
+        });
+      };
+    },
   }
 };

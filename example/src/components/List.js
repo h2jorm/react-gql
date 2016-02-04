@@ -1,12 +1,14 @@
 import React from 'react';
 import Gql from '../react-gql';
 
+import Post from './Post';
+
 class List extends React.Component {
   render() {
     return (
       <ul>
         {this.props.posts.map((post, index) =>
-          <li key={index}>{post.title}</li>
+          <Post key={index} post={post} />
         )}
       </ul>
     );
@@ -20,7 +22,9 @@ export default Gql.Branch(List, {
   init: {
     query: `
       query {
-        posts {title}
+        posts {
+          ${Post.getFragment()}
+        }
       }
     `,
     action: 'blogInit'

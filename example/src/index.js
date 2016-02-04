@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import List from './components/List';
+import Root from './containers/Root';
 
 import './config';
 
 ReactDOM.render(
-  <List />,
+  <Root />,
   document.getElementById('root')
 );

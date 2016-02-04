@@ -3,6 +3,7 @@ const {
   GraphQLObjectType,
   GraphQLList,
   GraphQLString,
+  GraphQLInt,
 } = require('graphql');
 
 var posts = [
@@ -10,10 +11,25 @@ var posts = [
   {title: 'world'}
 ];
 
+var user = {
+  name: 'anonymous',
+  city: 'Shanghai',
+  age: 20,
+};
+
 const Post = new GraphQLObjectType({
   name: 'Post',
   fields: () => ({
     title: {type: GraphQLString}
+  })
+});
+
+const User = new GraphQLObjectType({
+  name: 'User',
+  fields: () => ({
+    name: {type: GraphQLString},
+    city: {type: GraphQLString},
+    age: {type: GraphQLInt},
   })
 });
 
@@ -26,6 +42,10 @@ module.exports = new GraphQLSchema({
         resolve: (root, args) => {
           return posts;
         }
+      },
+      user: {
+        type: User,
+        resolve: (root, args) => user,
       }
     }),
   }),
