@@ -16,7 +16,7 @@ class Root extends React.Component {
   }
 }
 
-export default Gql.Branch(Root, {
+export default Gql.Root(Root, {
   getState: state => ({
     user: state.blog.user,
     posts: state.blog.posts,

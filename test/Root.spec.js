@@ -16,7 +16,7 @@ import {
 
 import {
   List,
-  branchOpts,
+  rootOpts,
 } from './demo/components/List';
 
 
@@ -26,17 +26,17 @@ const getPosts = () => ([
   {id: '3', content: 'hello graphql', likes: 3}
 ]);
 
-describe('Branch', () => {
+describe('Root', () => {
   describe('Demo List component', () => {
     let conf, list, listNode;
     beforeAll(prepare);
     beforeEach(() => {
       conf = {
         fetchAndDispatch: function ({query, action, variables}) {
-          if (query === branchOpts.init.query) {
+          if (query === rootOpts.init.query) {
             return store.dispatch(actions[action]({posts: getPosts()}));
           }
-          if (query === branchOpts.mutations.likeAll.query) {
+          if (query === rootOpts.mutations.likeAll.query) {
             return store.dispatch(actions[action](null));
           }
         }
@@ -106,8 +106,8 @@ describe('Branch', () => {
     afterEach(() => {
       ReactDOM.unmountComponentAtNode(helloNode.parentNode);
     });
-    it('should send desired props of Gql.Branch into its children', () => {
-      const MyHello = Gql.Branch(Hello, {
+    it('should send desired props of Gql.Root into its children', () => {
+      const MyHello = Gql.Root(Hello, {
         getProps: props => {
           const {name, role} = props;
           return {name, role};
@@ -119,8 +119,8 @@ describe('Branch', () => {
       helloNode = ReactDOM.findDOMNode(hello);
       expect(helloNode.textContent).toBe('hello, manager jack');
     });
-    it('should ignore unecessary props of Gql.Branch', () => {
-      const MyHello = Gql.Branch(Hello, {
+    it('should ignore unecessary props of Gql.Root', () => {
+      const MyHello = Gql.Root(Hello, {
         getProps: props => {
           const {name} = props;
           return {name};

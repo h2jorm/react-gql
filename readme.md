@@ -67,8 +67,8 @@ function fetchAndDispatch({query, variables = null, action}) {
 };
 ```
 
-### Branch
-`Gql.Branch` method takes a `ReactClass` and returns a new `ReactClass` that contains the original one. The original `ReactClass` will receive props provided from the new one.
+### Root
+`Gql.Root` method takes a `ReactClass` and returns a new `ReactClass` that contains the original one. The original `ReactClass` will receive props provided from the new one.
 
 ```js
 import React from 'react';
@@ -102,7 +102,7 @@ class List extends React.Component {
   }
 }
 
-export const ListBranch = Gql.Branch(List, {
+export const ListRoot = Gql.Root(List, {
   // connect data from store to `this.props` of `List`
   getState: state => ({
     post: state.posts
@@ -141,7 +141,7 @@ export const ListBranch = Gql.Branch(List, {
 ```
 
 ### Fragment
-Components wrapped by `Gql.Branch` is considered smart components. They sync states with redux store.
+Components wrapped by `Gql.Root` is considered smart components. They sync states with redux store.
 
 However, components wrapped by `Gql.Fragment` is considered dummy components. They are able to declare data structure but receive data only from `props`.
 
@@ -226,7 +226,7 @@ class List extends React.Component {
   }
 }
 
-export const ListBranch = Gql.Branch(List, {
+export const ListRoot = Gql.Root(List, {
   getState: state => ({
     posts: state.blog.posts
   }),
@@ -247,7 +247,7 @@ export const ListBranch = Gql.Branch(List, {
 ### connect
 `Gql.connect` is a redux middleware responsible for updating state when store changes. Compared with the implementation of `react-redux`, it is more convenient to add a middleware when creating a store.
 
-When a `GqlBranchContainer` `componentDidMount`, a connection function will be registered in the middleware. Every time store changes, all registered connection functions will be executed one by one. When `componentWillUnmount`, the connection function will be canceled.
+When a `GqlRootContainer` `componentDidMount`, a connection function will be registered in the middleware. Every time store changes, all registered connection functions will be executed one by one. When `componentWillUnmount`, the connection function will be canceled.
 
 ```js
 import React from 'react';
@@ -297,7 +297,7 @@ Post.getFragment('editor'); // 'id,name'
 ```
 
 ### Deliver props
-It is possible to deliver props from `Branch` component to wrapped component.
+It is possible to deliver props from `Root` component to wrapped component.
 
 ```js
 import {
@@ -313,7 +313,7 @@ class Hello extends React.Component {
     );
   }
 }
-Hello = Gql.Branch(Hello, {
+Hello = Gql.Root(Hello, {
   getProps: props => {
     const {name} = props;
     return {name};

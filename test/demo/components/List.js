@@ -30,7 +30,7 @@ class OriginList extends React.Component {
   }
 }
 
-export const branchOpts = {
+export const rootOpts = {
   getState: state => ({
     posts: state.blog.posts
   }),
@@ -58,4 +58,4 @@ export const branchOpts = {
   }
 };
 
-export const List = Gql.Branch(OriginList, branchOpts);
+export const List = Gql.Root(OriginList, rootOpts);
