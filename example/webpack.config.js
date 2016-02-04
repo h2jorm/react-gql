@@ -15,7 +15,7 @@ const loaders = [
       presets: ['react', 'es2015', 'stage-0']
     },
   }
-]
+];
 
 module.exports = {
   entry: './src/index',

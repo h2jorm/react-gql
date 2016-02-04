@@ -1,8 +1,8 @@
 // Karma configuration
 // Generated on Sat Jan 23 2016 20:17:09 GMT+0800 (CST)
-const path = require('path')
+const path = require('path');
 
-module.exports = function(config) {
+module.exports = function (config) {
   var configuration = {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -99,11 +99,11 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true
-  }
+  };
 
   if (process.env.TRAVIS) {
-    configuration.browsers = ['Chrome_travis_ci']
+    configuration.browsers = ['Chrome_travis_ci'];
   }
 
-  config.set(configuration)
-}
+  config.set(configuration);
+};
