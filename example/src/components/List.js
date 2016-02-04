@@ -7,11 +7,11 @@ class List extends React.Component {
   render() {
     const {posts} = this.props;
     return (
-      <ul>
+      <div>
         {posts.map((post, index) =>
           <Post key={index} post={post} />
         )}
-      </ul>
+      </div>
     );
   }
 }

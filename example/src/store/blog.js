@@ -29,5 +29,29 @@ module.exports = {
         });
       };
     },
+    like: function *() {
+      yield type => {
+        return ({posts}) => {
+          return {type, posts};
+        };
+      };
+      yield (state, action) => {
+        return Object.assign({}, state, {
+          posts: action.posts
+        });
+      };
+    },
+    dislike: function *() {
+      yield type => {
+        return ({posts}) => {
+          return {type, posts};
+        };
+      };
+      yield (state, action) => {
+        return Object.assign({}, state, {
+          posts: action.posts
+        });
+      };
+    }
   }
 };
