@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf lib && babel src --out-dir lib --presets es2015,stage-0",
     "test": "karma start",
-    "lint": "eslint src test"
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
