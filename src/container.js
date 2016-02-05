@@ -107,13 +107,15 @@ function getMutations(gqlUnits = {}) {
 }
 
 function parseGqlUnit(opts) {
-  const {query, variables, action, type} = opts;
+  const {query, action, type} = opts;
+  let {variables} = opts;
   return (inputVariables) => {
+    variables = inputVariables || variables || null;
     if (isLogger)
-      logger(opts);
+      logger(Object.assign(opts, {variables}));
     return fetchAndDispatch({
       query,
-      variables: inputVariables || variables || null,
+      variables,
       action,
     });
   };
