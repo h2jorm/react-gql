@@ -39,7 +39,7 @@ export default Gql.Fragment(Post, {
     like: {
       query: `
         mutation ($id: ID!) {
-          posts: likePost (id: $id) {
+          post: likePost (id: $id) {
             id, title, likes
           }
         }
@@ -49,7 +49,7 @@ export default Gql.Fragment(Post, {
     dislike: {
       query: `
         mutation ($id: ID!) {
-          posts: dislikePost (id: $id) {
+          post: dislikePost (id: $id) {
             id, title, likes
           }
         }

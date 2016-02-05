@@ -1,6 +1,6 @@
 {
   "name": "react-gql",
-  "version": "0.1.0-rc7",
+  "version": "0.1.0-rc8",
   "description": "a collection of helper functions to build a react app with redux and graphql",
   "main": "lib/index.js",
   "scripts": {

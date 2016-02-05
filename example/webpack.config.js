@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 const output = {
   path: path.join(__dirname, 'build'),
@@ -17,9 +18,16 @@ const loaders = [
   }
 ];
 
+const plugins = [
+  new webpack.ProvidePlugin({
+    _: 'lodash'
+  })
+];
+
 module.exports = {
   entry: './src/index',
   output,
   module: {loaders},
+  plugins,
   devtool: '#source-map',
 };

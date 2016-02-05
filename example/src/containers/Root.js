@@ -23,15 +23,18 @@ export default Gql.Root(Root, {
   }),
   init: {
     query: `
-      query {
+      query ($type: String) {
         user {
           ${User.getFragment()}
         }
-        posts {
+        posts (type: $type) {
           ${List.getFragment()}
         }
       }
     `,
     action: ['blogUserInfo', 'blogInit'],
-  }
+    variables: {
+      type: 'economy'
+    }
+  },
 });
