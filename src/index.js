@@ -1,6 +1,6 @@
 import {
   set,
-  Branch,
+  Root,
   Fragment,
 } from './container';
 
@@ -10,7 +10,7 @@ import {
 
 module.exports = {
   set,
-  Branch,
+  Root,
   Fragment,
   connect,
 };

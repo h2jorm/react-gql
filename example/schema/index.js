@@ -4,11 +4,12 @@ const {
   GraphQLList,
   GraphQLString,
   GraphQLInt,
+  GraphQLID,
 } = require('graphql');
 
 var posts = [
-  {title: 'hello'},
-  {title: 'world'}
+  {id: '1', title: 'hello', likes: 0},
+  {id: '2', title: 'world', likes: 1}
 ];
 
 var user = {
@@ -20,7 +21,9 @@ var user = {
 const Post = new GraphQLObjectType({
   name: 'Post',
   fields: () => ({
-    title: {type: GraphQLString}
+    id: {type: GraphQLID},
+    title: {type: GraphQLString},
+    likes: {type: GraphQLInt},
   })
 });
 
@@ -47,6 +50,42 @@ module.exports = new GraphQLSchema({
         type: User,
         resolve: (root, args) => user,
       }
+    }),
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'Mutation',
+    fields: () => ({
+      likePost: {
+        type: new GraphQLList(Post),
+        args: {
+          id: {type: GraphQLID}
+        },
+        resolve: (root, args) => {
+          for (let i = 0, j = posts.length; i < j; i++) {
+            if (posts[i].id === args.id) {
+              posts[i].likes++;
+              return posts;
+            }
+          }
+          return posts;
+        }
+      },
+      dislikePost: {
+        type: new GraphQLList(Post),
+        args: {
+          id: {type: GraphQLID}
+        },
+        resolve: (root, args) => {
+          for (let i = 0, j = posts.length; i < j; i++) {
+            if (posts[i].id === args.id) {
+              if (posts[i].likes > 0)
+                posts[i].likes--;
+              return posts;
+            }
+          }
+          return posts;
+        }
+      },
     }),
   }),
 });

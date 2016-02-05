@@ -5,28 +5,23 @@ import Post from './Post';
 
 class List extends React.Component {
   render() {
+    const {posts} = this.props;
     return (
-      <ul>
-        {this.props.posts.map((post, index) =>
+      <div>
+        {posts.map((post, index) =>
           <Post key={index} post={post} />
         )}
-      </ul>
+      </div>
     );
   }
 }
 
-export default Gql.Branch(List, {
-  getState: state => ({
-    posts: state.blog.posts
-  }),
-  init: {
-    query: `
-      query {
-        posts {
-          ${Post.getFragment()}
-        }
-      }
-    `,
-    action: 'blogInit'
-  }
+export default Gql.Fragment(List, {
+  // Fragment name `Posts` is not declared in server.
+  // However, it will not be validated.
+  fragment: `
+    fragment posts on Posts {
+      ${Post.getFragment()}
+    }
+  `
 });
