@@ -61,7 +61,8 @@ function fetchAndDispatch({query, variables = null, action}) {
     }),
   }).then(res => {
     return res.json().then(data => {
-      store.dispatch(action(data.data));
+      if (action)
+        store.dispatch(action(data.data));
     });
   });
 };
@@ -102,7 +103,7 @@ class List extends React.Component {
   }
 }
 
-export const ListRoot = Gql.Root(List, {
+const rootConfig = {
   // connect data from store to `this.props` of `List`
   getState: state => ({
     post: state.posts
@@ -137,7 +138,9 @@ export const ListRoot = Gql.Root(List, {
       action: actions.likeAllPosts
     }
   }
-});
+};
+
+export const ListRoot = Gql.Root(rootConfig)(List);
 ```
 
 ### Fragment
@@ -180,7 +183,7 @@ class Post extends React.Component {
   }
 }
 
-export const PostFragment = Gql.Fragment(Post, {
+const fragmentConfig = {
   fragment: `
     fragment post on Post {
       id, content, likes
@@ -199,8 +202,10 @@ export const PostFragment = Gql.Fragment(Post, {
       // assume `actions.blogLike` is an action creator function
       action: actions.blogLike,
     }
-  }
-});
+  }  
+};
+
+export const PostFragment = Gql.Fragment(fragmentConfig)(Post);
 
 // src/components/List.js
 import React from 'react';
@@ -226,7 +231,7 @@ class List extends React.Component {
   }
 }
 
-export const ListRoot = Gql.Root(List, {
+const rootConfig = {
   getState: state => ({
     posts: state.blog.posts
   }),
@@ -241,7 +246,9 @@ export const ListRoot = Gql.Root(List, {
     `,
     action: actions.blogInit,
   }
-});
+};
+
+export const ListRoot = Gql.Root(rootConfig)(List);
 ```
 
 ### connect
@@ -267,6 +274,38 @@ export const store = createStoreWithMiddleware(
 ```
 
 ## Advanced
+
+### Decorator
+`Gql.Root` and `Gql.Fragment` support decorator syntax.
+
+```js
+import React from 'react';
+import actions from './actions';
+
+@Gql.Root(
+  getState: state => ({
+    name: state.user.name,
+  }),
+  init: {
+    query: `
+      {
+        user {
+          name,
+        }
+      }
+    `,
+    action: actions.initUserInfo
+  }
+)
+export class Hello extends React.Component {
+  render() {
+    return (
+      <div>Hello, {this.props.name}</div>
+    );
+  }
+}
+
+```
 
 ### Nested fragment
 `Gql.Fragment` supports nested fragment declare.
@@ -313,12 +352,12 @@ class Hello extends React.Component {
     );
   }
 }
-Hello = Gql.Root(Hello, {
+Hello = Gql.Root({
   getProps: props => {
     const {name} = props;
     return {name};
   }
-});
+})(Hello);
 const hello = renderIntoDocument(
   <Hello name="world" />
 );
