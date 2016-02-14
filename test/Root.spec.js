@@ -107,12 +107,12 @@ describe('Root', () => {
       ReactDOM.unmountComponentAtNode(helloNode.parentNode);
     });
     it('should send desired props of Gql.Root into its children', () => {
-      const MyHello = Gql.Root(Hello, {
+      const MyHello = Gql.Root({
         getProps: props => {
           const {name, role} = props;
           return {name, role};
         }
-      });
+      })(Hello);
       hello = renderIntoDocument(
         <MyHello name="jack" role="manager" />
       );
@@ -120,12 +120,12 @@ describe('Root', () => {
       expect(helloNode.textContent).toBe('hello, manager jack');
     });
     it('should ignore unecessary props of Gql.Root', () => {
-      const MyHello = Gql.Root(Hello, {
+      const MyHello = Gql.Root({
         getProps: props => {
           const {name} = props;
           return {name};
         }
-      });
+      })(Hello);
       hello = renderIntoDocument(
         <MyHello name="jack" role="manager" />
       );

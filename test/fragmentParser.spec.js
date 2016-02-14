@@ -114,12 +114,12 @@ describe('fragmentParser', () => {
   });
   describe('error prone', () => {
     it('should return empty string if 1st argument is undefined or empty string', () => {
-      const fragment = ``;
+      const fragment = '';
       expect(getFragment()).toBe('');
       expect(getFragment(fragment)).toBe('');
     });
     it('should return empty string if 2nd argument is not valid', () => {
-      const fragment = `fragment user on User {id,name}`;
+      const fragment = 'fragment user on User {id,name}';
       expect(getFragment(fragment, 'post')).toBe('');
     });
     it('should return empty string if spreaded fragment is not found', () => {

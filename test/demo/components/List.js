@@ -3,33 +3,6 @@ import {Post} from './Post';
 import Gql from '#/src';
 import {store, actions} from '../store';
 
-class OriginList extends React.Component {
-  static defaultProps = {
-    posts: []
-  };
-  likeAll() {
-    this.props.mutations.likeAll();
-  }
-  reset() {
-    store.dispatch(actions.blogReset());
-  }
-  render() {
-    return (
-      <div>
-        <ul>
-          {
-            this.props.posts.map(post =>
-              <Post key={post.id} post={post} />
-            )
-          }
-        </ul>
-        <button onClick={::this.likeAll}>like all</button>
-        <button onClick={::this.reset}>reset</button>
-      </div>
-    );
-  }
-}
-
 export const rootOpts = {
   getState: state => ({
     posts: state.blog.posts
@@ -58,4 +31,30 @@ export const rootOpts = {
   }
 };
 
-export const List = Gql.Root(OriginList, rootOpts);
+@Gql.Root(rootOpts)
+export class List extends React.Component {
+  static defaultProps = {
+    posts: []
+  };
+  likeAll() {
+    this.props.mutations.likeAll();
+  }
+  reset() {
+    store.dispatch(actions.blogReset());
+  }
+  render() {
+    return (
+      <div>
+        <ul>
+          {
+            this.props.posts.map(post =>
+              <Post key={post.id} post={post} />
+            )
+          }
+        </ul>
+        <button onClick={::this.likeAll}>like all</button>
+        <button onClick={::this.reset}>reset</button>
+      </div>
+    );
+  }
+}

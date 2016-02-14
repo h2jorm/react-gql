@@ -2,7 +2,28 @@ import React from 'react';
 import Gql from '#/src';
 import {actions} from '../store';
 
-export class OriginPost extends React.Component {
+export const fragmentOpts = {
+  fragment: `
+    fragment post on Post {
+      id, content, likes
+    }
+  `,
+  mutations: {
+    like: {
+      query: `
+        mutation likePost($id: ID) {
+          likePost(id: $id) {
+            id, content, likes
+          }
+        }
+      `,
+      action: 'blogLike',
+    }
+  }
+};
+
+@Gql.Fragment(fragmentOpts)
+export class Post extends React.Component {
   static defaultProps = {
     post: {
       content: '',
@@ -33,25 +54,3 @@ export class OriginPost extends React.Component {
     );
   }
 }
-
-export const fragmentOpts = {
-  fragment: `
-    fragment post on Post {
-      id, content, likes
-    }
-  `,
-  mutations: {
-    like: {
-      query: `
-        mutation likePost($id: ID) {
-          likePost(id: $id) {
-            id, content, likes
-          }
-        }
-      `,
-      action: 'blogLike',
-    }
-  }
-};
-
-export const Post = Gql.Fragment(OriginPost, fragmentOpts);
