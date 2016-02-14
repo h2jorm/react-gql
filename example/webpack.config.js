@@ -12,8 +12,11 @@ const loaders = [
     loader: 'babel',
     exclude: /node_modules/,
     query: {
-      plugins: ['transform-runtime'],
-      presets: ['react', 'es2015', 'stage-0']
+      plugins: [
+        'transform-runtime',
+        'transform-decorators-legacy'
+      ],
+      presets: ['react', 'es2015', 'stage-0'],
     },
   }
 ];
@@ -25,7 +28,7 @@ const plugins = [
 ];
 
 module.exports = {
-  entry: './src/index',
+  entry: path.join(__dirname, 'src/index'),
   output,
   module: {loaders},
   plugins,
