@@ -5,3 +5,6 @@
 /.npmignore
 /.gitignore
 /karma.conf.js
+.eslintignore
+.eslintrc
+.travis.yml

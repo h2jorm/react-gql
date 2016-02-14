@@ -1,7 +1,36 @@
 import React from 'react';
 import Gql from '../react-gql';
 
-class Post extends React.Component {
+@Gql.Fragment({
+  fragment: `
+    fragment post on Post {
+      id, title, likes
+    }
+  `,
+  mutations: {
+    like: {
+      query: `
+        mutation ($id: ID!) {
+          post: likePost (id: $id) {
+            id, title, likes
+          }
+        }
+      `,
+      action: 'blogLike'
+    },
+    dislike: {
+      query: `
+        mutation ($id: ID!) {
+          post: dislikePost (id: $id) {
+            id, title, likes
+          }
+        }
+      `,
+      action: 'blogDislike'
+    },
+  }
+})
+export default class Post extends React.Component {
   like(id) {
     return () => {
       this.props.mutations.like({id});
@@ -28,33 +57,3 @@ class Post extends React.Component {
     );
   }
 }
-
-export default Gql.Fragment(Post, {
-  fragment: `
-    fragment post on Post {
-      id, title, likes
-    }
-  `,
-  mutations: {
-    like: {
-      query: `
-        mutation ($id: ID!) {
-          posts: likePost (id: $id) {
-            id, title, likes
-          }
-        }
-      `,
-      action: 'blogLike'
-    },
-    dislike: {
-      query: `
-        mutation ($id: ID!) {
-          posts: dislikePost (id: $id) {
-            id, title, likes
-          }
-        }
-      `,
-      action: 'blogDislike'
-    },
-  }
-});

@@ -19,75 +19,79 @@ export function set(opts) {
 };
 
 // wrap a smart react component with optional init query
-export function Root(reactComponent, opts) {
-  let latestChildren;
-  function connect(reactComponentInstance) {
-    return function (store) {
-      reactComponentInstance.setState(reactComponentInstance.getStoreData(store));
-    };
-  }
-  return class GqlRoot extends React.Component {
-    static latestChildren() {
-      return latestChildren;
-    };
-    constructor() {
-      super();
-      this.state = this.getStoreData(store);
+export function Root(opts) {
+  return function (reactComponent) {
+    let latestChildren;
+    function connect(reactComponentInstance) {
+      return function (store) {
+        reactComponentInstance.setState(reactComponentInstance.getStoreData(store));
+      };
     }
-    getStoreData(store) {
-      const {getState = () => ({})} = opts;
-      return getState(store.getState());
-    }
-    // connect component state with store
-    componentWillMount() {
-      this.disconnect = register(connect(this));
-    }
-    // initial query
-    componentDidMount() {
-      if (!opts.init)
-        return;
-      parseGqlUnit(opts.init)();
-    }
-    // disconnect component state with store
-    componentWillUnmount() {
-      const {disconnect} = this;
-      if (disconnect && typeof disconnect === 'function')
-        disconnect();
-    }
-    render() {
-      const {mutations, getProps} = opts;
-      if (getProps)
-        Object.assign(this.state, getProps(this.props));
-      if (mutations) {
-        Object.assign(this.state, {
-          mutations: getMutations(mutations)
-        });
+    return class GqlRoot extends React.Component {
+      static latestChildren() {
+        return latestChildren;
+      };
+      constructor() {
+        super();
+        this.state = this.getStoreData(store);
       }
-      return latestChildren = React.createElement(reactComponent, this.state);
-    }
+      getStoreData(store) {
+        const {getState = () => ({})} = opts;
+        return getState(store.getState());
+      }
+      // connect component state with store
+      componentWillMount() {
+        this.disconnect = register(connect(this));
+      }
+      // initial query
+      componentDidMount() {
+        if (!opts.init)
+          return;
+        parseGqlUnit(opts.init)();
+      }
+      // disconnect component state with store
+      componentWillUnmount() {
+        const {disconnect} = this;
+        if (disconnect && typeof disconnect === 'function')
+          disconnect();
+      }
+      render() {
+        const {mutations, getProps} = opts;
+        if (getProps)
+          Object.assign(this.state, getProps(this.props));
+        if (mutations) {
+          Object.assign(this.state, {
+            mutations: getMutations(mutations)
+          });
+        }
+        return latestChildren = React.createElement(reactComponent, this.state);
+      }
+    };
   };
-};
+}
 
 // wrap a dummy react component with fragment definition
-export function Fragment(reactComponent, opts) {
-  let latestChildren;
-  return class GqlFragment extends React.Component {
-    static getFragment() {
-      return getFragment(opts.fragment);
-    };
-    static latestChildren() {
-      return latestChildren;
-    };
-    render() {
-      const {mutations} = opts;
-      const props = {
-        ...this.props,
-        mutations: getMutations(mutations)
+export function Fragment(opts) {
+  return function (reactComponent) {
+    let latestChildren;
+    return class GqlFragment extends React.Component {
+      static getFragment() {
+        return getFragment(opts.fragment);
       };
-      return latestChildren = React.createElement(reactComponent, props);
-    }
+      static latestChildren() {
+        return latestChildren;
+      };
+      render() {
+        const {mutations} = opts;
+        const props = {
+          ...this.props,
+          mutations: getMutations(mutations)
+        };
+        return latestChildren = React.createElement(reactComponent, props);
+      }
+    };
   };
-};
+}
 
 /**
  * @description transform an object of mutation config to an object of mutation function
@@ -107,13 +111,15 @@ function getMutations(gqlUnits = {}) {
 }
 
 function parseGqlUnit(opts) {
-  const {query, variables, action, type} = opts;
+  const {query, action, type} = opts;
+  let {variables} = opts;
   return (inputVariables) => {
+    variables = inputVariables || variables || null;
     if (isLogger)
-      logger(opts);
+      logger(Object.assign(opts, {variables}));
     return fetchAndDispatch({
       query,
-      variables: inputVariables || variables || null,
+      variables,
       action,
     });
   };

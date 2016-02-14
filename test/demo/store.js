@@ -5,7 +5,7 @@ import {
   applyMiddleware,
 } from 'redux';
 import {connect} from '#/src';
-import {compose} from 'redux-lego';
+import {genActionsAndReducers} from 'redux-lego';
 
 import blog from './blog';
 
@@ -13,10 +13,10 @@ let createStoreWithMiddleware = applyMiddleware(
   connect,
 )(createStore);
 
-export const {actions, reducer} = compose(
+export const {actions, reducers} = genActionsAndReducers(
   blog
 );
 
 export const store = createStoreWithMiddleware(
-  combineReducers(reducer)
+  combineReducers(reducers)
 );

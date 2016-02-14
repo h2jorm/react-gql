@@ -13,7 +13,6 @@ import {
 } from './helper';
 
 import {
-  OriginPost,
   Post,
   fragmentOpts,
 } from './demo/components/Post';
