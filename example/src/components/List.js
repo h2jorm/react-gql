@@ -3,7 +3,16 @@ import Gql from '../react-gql';
 
 import Post from './Post';
 
-class List extends React.Component {
+@Gql.Fragment({
+  // Fragment name `Posts` is not declared in server.
+  // However, it will not be validated.
+  fragment: `
+    fragment posts on Posts {
+      ${Post.getFragment()}
+    }
+  `
+})
+export default class List extends React.Component {
   render() {
     const {posts} = this.props;
     return (
@@ -15,13 +24,3 @@ class List extends React.Component {
     );
   }
 }
-
-export default Gql.Fragment(List, {
-  // Fragment name `Posts` is not declared in server.
-  // However, it will not be validated.
-  fragment: `
-    fragment posts on Posts {
-      ${Post.getFragment()}
-    }
-  `
-});

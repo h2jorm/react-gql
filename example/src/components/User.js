@@ -1,7 +1,14 @@
 import React from 'react';
 import Gql from '../react-gql';
 
-class User extends React.Component {
+@Gql.Fragment({
+  fragment: `
+    fragment user on User {
+      name, city, age
+    }
+  `
+})
+export default class User extends React.Component {
   render() {
     return (
       <dl>
@@ -15,11 +22,3 @@ class User extends React.Component {
     );
   }
 }
-
-export default Gql.Fragment(User, {
-  fragment: `
-    fragment user on User {
-      name, city, age
-    }
-  `
-});
