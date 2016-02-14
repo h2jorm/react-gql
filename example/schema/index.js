@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const {
   GraphQLSchema,
   GraphQLObjectType,
@@ -8,8 +9,9 @@ const {
 } = require('graphql');
 
 var posts = [
-  {id: '1', title: 'hello', likes: 0},
-  {id: '2', title: 'world', likes: 1}
+  {id: '1', title: 'hello', type: 'economy', likes: 0},
+  {id: '2', title: 'world', type: 'economy', likes: 1},
+  {id: '3', title: 'bye', type: 'politics', likes: 2}
 ];
 
 var user = {
@@ -23,6 +25,7 @@ const Post = new GraphQLObjectType({
   fields: () => ({
     id: {type: GraphQLID},
     title: {type: GraphQLString},
+    type: {type: GraphQLString},
     likes: {type: GraphQLInt},
   })
 });
@@ -42,8 +45,11 @@ module.exports = new GraphQLSchema({
     fields: () => ({
       posts: {
         type: new GraphQLList(Post),
+        args: {
+          type: {type: GraphQLString},
+        },
         resolve: (root, args) => {
-          return posts;
+          return _.filter(posts, post => post.type === args.type);
         }
       },
       user: {
@@ -56,7 +62,7 @@ module.exports = new GraphQLSchema({
     name: 'Mutation',
     fields: () => ({
       likePost: {
-        type: new GraphQLList(Post),
+        type: Post,
         args: {
           id: {type: GraphQLID}
         },
@@ -64,14 +70,14 @@ module.exports = new GraphQLSchema({
           for (let i = 0, j = posts.length; i < j; i++) {
             if (posts[i].id === args.id) {
               posts[i].likes++;
-              return posts;
+              return posts[i];
             }
           }
-          return posts;
+          return null;
         }
       },
       dislikePost: {
-        type: new GraphQLList(Post),
+        type: Post,
         args: {
           id: {type: GraphQLID}
         },
@@ -80,10 +86,10 @@ module.exports = new GraphQLSchema({
             if (posts[i].id === args.id) {
               if (posts[i].likes > 0)
                 posts[i].likes--;
-              return posts;
+              return posts[i];
             }
           }
-          return posts;
+          return null;
         }
       },
     }),

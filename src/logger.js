@@ -5,7 +5,7 @@ export default function ({query, variables, action, type = 'query'}) {
   console.group(`react-gql ${type.toUpperCase()}`);
   console.log(query);
   if (variables)
-    console.log('%c variables', css(colorMeno), variables);
+    console.log('%c variables', css(colorInfo), variables);
   console.groupEnd();
 }
 
