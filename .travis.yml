@@ -1,18 +1,8 @@
 language: node_js
 node_js:
-  - 5.4
+  - 5
+  - 4
 before_script:
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-deploy:
-  provider: npm
-  email: 417300981@qq.com
-  api_key:
-    secure: P/5G6Q8b5E0o3oYguK+gbAkNiM9xngkhD08YhU0k+YaV/GJ/Ga7XrF12K3CSx/2dTEejGoYVRzW8g+JRuc5RqLCzKpmbXxJ1w26w8MdrA5KYXJ10CvSmvBrhXlWsWu4Zsql7pf9KhuoJw+LdBW/4YX5ae0ut/pTTLy+Iw4B1JqKZY+u+PTTFx2X+OmSERsSGeAcduCP6EaZXhtMF7P1FdP8bNpUZmUIS6zC445HDM5NdOosXOUtRohsrDNkk2qXnQpxvvGwnVCikLLVAQ+8PmeTHk7Hemjtefqp8G0NW8dEM03fb/Uypauz4CzhyYOIwTRjkywi7Ch8DdNUOQ2Pj/UOvraGqZVsHTBFKuut40OQ4mkJq76sG8PX07tCLmF7Zo5C1hTG1zx0zo6cNPTJ8dMTYQ9PEBm/NoHqjHLmhmdZM0nBi5VXKJs+h9fZcR8gdd3/qSuSJTelzH0j+N5CM6cyeuYG1KNFFERK6/IpnNC2IQAKK0T1lhr7f4Sul1/UkVYmufVFTFCfZrsEUepFwJU3re1oeM1i7dTijuDDGfAVuT72WpoRkAXywVg/fygVxA+mdpJfjYHwgqHnnncdhPS8tHT0nioh+GQ8p1E49SnRyfwxhXhk43Nx37exkkx45rl7d9Y8PZrd+GtdA1Z1aXHolDeVdPHUnoBaQlh/ZPjw=
-  on:
-    tags: true
-    repo: leeching/react-gql
-  skip_cleanup: true
-before_deploy:
-  - npm run build
