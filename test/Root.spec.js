@@ -92,7 +92,7 @@ describe('Root', () => {
       Simulate.click(likeAllBtn);
     }
   });
-  describe('getProps', () => {
+  describe('Props delivery', () => {
     let hello, helloNode;
     class Hello extends React.Component {
       render() {
@@ -106,31 +106,25 @@ describe('Root', () => {
     afterEach(() => {
       ReactDOM.unmountComponentAtNode(helloNode.parentNode);
     });
-    it('should send desired props of Gql.Root into its children', () => {
-      const MyHello = Gql.Root({
-        getProps: props => {
-          const {name, role} = props;
-          return {name, role};
-        }
-      })(Hello);
+    it('should deliver props of Gql.Root into its children', () => {
+      const MyHello = Gql.Root()(Hello);
       hello = renderIntoDocument(
         <MyHello name="jack" role="manager" />
       );
       helloNode = ReactDOM.findDOMNode(hello);
       expect(helloNode.textContent).toBe('hello, manager jack');
     });
-    it('should ignore unecessary props of Gql.Root', () => {
+    it('should take store as a priority if Gql.Root and `getState` providing a prop of same name', () => {
       const MyHello = Gql.Root({
-        getProps: props => {
-          const {name} = props;
-          return {name};
-        }
+        getState: props => ({
+          name: 'someone',
+        })
       })(Hello);
       hello = renderIntoDocument(
         <MyHello name="jack" role="manager" />
       );
       helloNode = ReactDOM.findDOMNode(hello);
-      expect(helloNode.textContent).toBe('hello,  jack');
+      expect(helloNode.textContent).toBe('hello, manager someone');
     });
   });
 });

@@ -57,8 +57,7 @@ export function Root(opts = {}) {
       }
       render() {
         const {mutations, getProps} = opts;
-        if (getProps)
-          Object.assign(this.state, getProps(this.props));
+        this.state = Object.assign({}, this.props || {}, this.state);
         if (mutations) {
           Object.assign(this.state, {
             mutations: getMutations(mutations)
