@@ -4,7 +4,7 @@ module.exports = {
     posts: [],
     user: {}
   },
-  mutation: {
+  mutations: {
     init: function *() {
       yield type => {
         return ({posts}) => {

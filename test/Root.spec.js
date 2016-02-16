@@ -34,10 +34,10 @@ describe('Root', () => {
       conf = {
         fetchAndDispatch: function ({query, action, variables}) {
           if (query === rootOpts.init.query) {
-            return store.dispatch(actions[action]({posts: getPosts()}));
+            return store.dispatch(action(actions)({posts: getPosts()}));
           }
           if (query === rootOpts.mutations.likeAll.query) {
-            return store.dispatch(actions[action](null));
+            return store.dispatch(action(actions)(null));
           }
         }
       };
@@ -56,7 +56,7 @@ describe('Root', () => {
     });
 
     it('should launch an initial query after initial rendering', () => {
-      expect(conf.fetchAndDispatch.calls.argsFor(0)[0].action).toBe('blogInit');
+      expect(conf.fetchAndDispatch.calls.argsFor(0)[0].action).toEqual(rootOpts.init.action);
     });
     describe('children', () => {
       it('should have props `mutations`', () => {
@@ -65,7 +65,7 @@ describe('Root', () => {
       });
       it('should be able to dispatch `likeAll` mutation', () => {
         clickLikeAllBtn();
-        expect(conf.fetchAndDispatch.calls.argsFor(1)[0].action).toBe('blogLikeAll');
+        expect(conf.fetchAndDispatch.calls.argsFor(1)[0].action).toEqual(rootOpts.mutations.likeAll.action);
       });
     });
     it('should update props of children component automatically when store changes', () => {

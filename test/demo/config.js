@@ -21,7 +21,9 @@ function fetchAndDispatch({query, variables = null, action}) {
     }),
   }).then(res => {
     return res.json().then(data => {
-      store.dispatch(actions[action](data.data));
+      action = action(actions);
+      if (action)
+        store.dispatch(action(data.data));
     });
   });
 };

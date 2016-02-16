@@ -3,7 +3,7 @@ module.exports = {
   defaultState: {
     posts: []
   },
-  mutation: {
+  mutations: {
     init: function *() {
       yield type => {
         return ({posts}) => {

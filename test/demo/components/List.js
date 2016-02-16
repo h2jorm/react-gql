@@ -15,7 +15,7 @@ export const rootOpts = {
         }
       }
     `,
-    action: 'blogInit',
+    action: actions => actions.blog.init,
   },
   mutations: {
     likeAll: {
@@ -26,7 +26,7 @@ export const rootOpts = {
           }
         }
       `,
-      action: 'blogLikeAll'
+      action: actions => actions.blog.likeAll,
     }
   }
 };
@@ -40,7 +40,7 @@ export class List extends React.Component {
     this.props.mutations.likeAll();
   }
   reset() {
-    store.dispatch(actions.blogReset());
+    store.dispatch(actions.blog.Reset());
   }
   render() {
     return (

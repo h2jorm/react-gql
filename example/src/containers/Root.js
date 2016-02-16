@@ -20,7 +20,10 @@ import User from '../components/User';
         }
       }
     `,
-    action: ['blogUserInfo', 'blogInit'],
+    action: [
+      actions => actions.blog.userInfo,
+      actions => actions.blog.init
+    ],
     variables: {
       type: 'economy'
     }

@@ -56,7 +56,7 @@ describe('Fragment', () => {
     it('should be able to dispatch `blogLike` mutation', () => {
       Simulate.click(postNode.querySelector('button'));
       const {action} = conf.fetchAndDispatch.calls.argsFor(0)[0];
-      expect(action).toBe('blogLike');
+      expect(action).toEqual(fragmentOpts.mutations.like.action);
     });
   });
 });
