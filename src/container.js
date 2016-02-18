@@ -57,13 +57,13 @@ export function Root(opts = {}) {
       }
       render() {
         const {mutations, getProps} = opts;
-        this.state = Object.assign({}, this.props || {}, this.state);
+        const props = Object.assign({}, this.props, this.state);
         if (mutations) {
-          Object.assign(this.state, {
+          Object.assign(props, {
             mutations: getMutations(mutations)
           });
         }
-        return latestChildren = React.createElement(reactComponent, this.state);
+        return latestChildren = React.createElement(reactComponent, props);
       }
     };
   };

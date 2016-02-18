@@ -1,4 +1,5 @@
 *.log
+/docs/
 /example/
 /src/
 /test/
