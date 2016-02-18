@@ -114,6 +114,37 @@ describe('Root', () => {
       helloNode = ReactDOM.findDOMNode(hello);
       expect(helloNode.textContent).toBe('hello, manager jack');
     });
+    it('should keep update with outer props', () => {
+      const MyHello = Gql.Root()(Hello);
+      class SayHello extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            name: 'anonymous',
+            role: 'unknown',
+          };
+        }
+        set() {
+          this.setState({
+            name: 'jack',
+            role: 'manager',
+          });
+        }
+        render() {
+          const {name, role} = this.state;
+          return (
+            <div>
+              <MyHello name={name} role={role} />
+              <button onClick={::this.set}></button>
+            </div>
+          );
+        }
+      }
+      hello = renderIntoDocument(<SayHello />);
+      helloNode = ReactDOM.findDOMNode(hello);
+      Simulate.click(helloNode.querySelector('button'));
+      expect(helloNode.querySelector('div').textContent).toBe('hello, manager jack');
+    });
     it('should take store as a priority if Gql.Root and `getState` providing a prop of same name', () => {
       const MyHello = Gql.Root({
         getState: props => ({
