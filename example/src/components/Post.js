@@ -16,7 +16,7 @@ import Gql from '../react-gql';
           }
         }
       `,
-      action: 'blogLike'
+      action: actions => actions.blog.like,
     },
     dislike: {
       query: `
@@ -26,7 +26,7 @@ import Gql from '../react-gql';
           }
         }
       `,
-      action: 'blogDislike'
+      action: actions => actions.blog.dislike,
     },
   }
 })

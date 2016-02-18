@@ -19,7 +19,7 @@ export function set(opts) {
 };
 
 // wrap a smart react component with optional init query
-export function Root(opts) {
+export function Root(opts = {}) {
   return function (reactComponent) {
     let latestChildren;
     function connect(reactComponentInstance) {
@@ -57,8 +57,7 @@ export function Root(opts) {
       }
       render() {
         const {mutations, getProps} = opts;
-        if (getProps)
-          Object.assign(this.state, getProps(this.props));
+        this.state = Object.assign({}, this.props || {}, this.state);
         if (mutations) {
           Object.assign(this.state, {
             mutations: getMutations(mutations)
@@ -71,7 +70,7 @@ export function Root(opts) {
 }
 
 // wrap a dummy react component with fragment definition
-export function Fragment(opts) {
+export function Fragment(opts = {}) {
   return function (reactComponent) {
     let latestChildren;
     return class GqlFragment extends React.Component {

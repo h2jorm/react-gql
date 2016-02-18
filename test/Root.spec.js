@@ -34,10 +34,10 @@ describe('Root', () => {
       conf = {
         fetchAndDispatch: function ({query, action, variables}) {
           if (query === rootOpts.init.query) {
-            return store.dispatch(actions[action]({posts: getPosts()}));
+            return store.dispatch(action(actions)({posts: getPosts()}));
           }
           if (query === rootOpts.mutations.likeAll.query) {
-            return store.dispatch(actions[action](null));
+            return store.dispatch(action(actions)(null));
           }
         }
       };
@@ -56,7 +56,7 @@ describe('Root', () => {
     });
 
     it('should launch an initial query after initial rendering', () => {
-      expect(conf.fetchAndDispatch.calls.argsFor(0)[0].action).toBe('blogInit');
+      expect(conf.fetchAndDispatch.calls.argsFor(0)[0].action).toEqual(rootOpts.init.action);
     });
     describe('children', () => {
       it('should have props `mutations`', () => {
@@ -65,7 +65,7 @@ describe('Root', () => {
       });
       it('should be able to dispatch `likeAll` mutation', () => {
         clickLikeAllBtn();
-        expect(conf.fetchAndDispatch.calls.argsFor(1)[0].action).toBe('blogLikeAll');
+        expect(conf.fetchAndDispatch.calls.argsFor(1)[0].action).toEqual(rootOpts.mutations.likeAll.action);
       });
     });
     it('should update props of children component automatically when store changes', () => {
@@ -92,7 +92,7 @@ describe('Root', () => {
       Simulate.click(likeAllBtn);
     }
   });
-  describe('getProps', () => {
+  describe('Props delivery', () => {
     let hello, helloNode;
     class Hello extends React.Component {
       render() {
@@ -106,31 +106,25 @@ describe('Root', () => {
     afterEach(() => {
       ReactDOM.unmountComponentAtNode(helloNode.parentNode);
     });
-    it('should send desired props of Gql.Root into its children', () => {
-      const MyHello = Gql.Root({
-        getProps: props => {
-          const {name, role} = props;
-          return {name, role};
-        }
-      })(Hello);
+    it('should deliver props of Gql.Root into its children', () => {
+      const MyHello = Gql.Root()(Hello);
       hello = renderIntoDocument(
         <MyHello name="jack" role="manager" />
       );
       helloNode = ReactDOM.findDOMNode(hello);
       expect(helloNode.textContent).toBe('hello, manager jack');
     });
-    it('should ignore unecessary props of Gql.Root', () => {
+    it('should take store as a priority if Gql.Root and `getState` providing a prop of same name', () => {
       const MyHello = Gql.Root({
-        getProps: props => {
-          const {name} = props;
-          return {name};
-        }
+        getState: props => ({
+          name: 'someone',
+        })
       })(Hello);
       hello = renderIntoDocument(
         <MyHello name="jack" role="manager" />
       );
       helloNode = ReactDOM.findDOMNode(hello);
-      expect(helloNode.textContent).toBe('hello,  jack');
+      expect(helloNode.textContent).toBe('hello, manager someone');
     });
   });
 });

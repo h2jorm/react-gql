@@ -17,7 +17,7 @@ export const fragmentOpts = {
           }
         }
       `,
-      action: 'blogLike',
+      action: actions => actions.blog.like,
     }
   }
 };

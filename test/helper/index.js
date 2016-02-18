@@ -9,5 +9,5 @@ export function prepare() {
 };
 
 export function resetStore() {
-  store.dispatch(actions.blogReset());
+  store.dispatch(actions.blog.reset());
 };

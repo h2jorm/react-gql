@@ -22,8 +22,14 @@ function fetchAndDispatch({query, variables = null, action}) {
     }),
   }).then(res => {
     return res.json().then(data => {
-      resolveMayBeArray(action, function (action) {
-        store.dispatch(actions[action](data.data));
+      if (!action)
+        return;
+      resolveMayBeArray(action, function (getAction) {
+        if (typeof getAction === 'function') {
+          const action = getAction(actions);
+          if (action)
+            store.dispatch(action(data.data));
+        }
       });
     });
   });
