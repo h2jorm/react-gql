@@ -37,7 +37,8 @@ export function Root(opts = {}) {
       }
       getStoreData(store) {
         const {getState = () => ({})} = opts;
-        return getState(store.getState());
+        const ret = getState(store.getState());
+        return Object.assign({}, ret);
       }
       // connect component state with store
       componentWillMount() {
