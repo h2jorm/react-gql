@@ -5,7 +5,7 @@ import {
   applyMiddleware,
 } from 'redux';
 import {connect} from '#/src';
-import {genActionsAndReducers} from 'redux-lego';
+import {build} from 'redux-brick';
 
 import blog from './blog';
 
@@ -13,7 +13,7 @@ let createStoreWithMiddleware = applyMiddleware(
   connect,
 )(createStore);
 
-export const {actions, reducers} = genActionsAndReducers(
+export const {actionCreators, reducers} = build(
   blog
 );
 

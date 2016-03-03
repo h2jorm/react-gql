@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import {store, actions} from './store';
+import {store, actionCreators} from './store';
 import Gql from '#/src';
 
 Gql.set({
@@ -21,7 +21,7 @@ function fetchAndDispatch({query, variables = null, action}) {
     }),
   }).then(res => {
     return res.json().then(data => {
-      action = action(actions);
+      action = action(actionCreators);
       if (action)
         store.dispatch(action(data.data));
     });

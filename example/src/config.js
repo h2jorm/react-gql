@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import {store, actions} from './store';
+import {store, actionCreators} from './store';
 import Gql from './react-gql';
 
 Gql.set({
@@ -26,7 +26,7 @@ function fetchAndDispatch({query, variables = null, action}) {
         return;
       resolveMayBeArray(action, function (getAction) {
         if (typeof getAction === 'function') {
-          const action = getAction(actions);
+          const action = getAction(actionCreators);
           if (action)
             store.dispatch(action(data.data));
         }

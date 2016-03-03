@@ -6,7 +6,7 @@ import {
 } from 'redux';
 import createLogger from 'redux-logger';
 import Gql from '../react-gql';
-import {genActionsAndReducers} from 'redux-lego';
+import {build} from 'redux-brick';
 
 import blog from './blog';
 
@@ -16,7 +16,7 @@ let createStoreWithMiddleware = applyMiddleware(
   logger
 )(createStore);
 
-export const {actions, reducers} = genActionsAndReducers(
+export const {actionCreators, reducers} = build(
   blog
 );
 

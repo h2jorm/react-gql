@@ -1,6 +1,6 @@
 import React from 'react';
 import Gql from '#/src';
-import {actions} from '../store';
+import {actionCreators} from '../store';
 
 export const fragmentOpts = {
   fragment: `
@@ -17,7 +17,7 @@ export const fragmentOpts = {
           }
         }
       `,
-      action: actions => actions.blog.like,
+      action: actionCreators => actionCreators.blog.like,
     }
   }
 };
