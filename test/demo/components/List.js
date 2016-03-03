@@ -1,7 +1,7 @@
 import React from 'react';
 import {Post} from './Post';
 import Gql from '#/src';
-import {store, actions} from '../store';
+import {store, actionCreators} from '../store';
 
 export const rootOpts = {
   getState: state => ({
@@ -15,7 +15,7 @@ export const rootOpts = {
         }
       }
     `,
-    action: actions => actions.blog.init,
+    action: actionCreators => actionCreators.blog.init,
   },
   mutations: {
     likeAll: {
@@ -26,7 +26,7 @@ export const rootOpts = {
           }
         }
       `,
-      action: actions => actions.blog.likeAll,
+      action: actionCreators => actionCreators.blog.likeAll,
     }
   }
 };

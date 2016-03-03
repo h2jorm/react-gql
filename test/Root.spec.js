@@ -7,7 +7,7 @@ import {
   Simulate,
 } from 'react-addons-test-utils';
 
-import {store, actions} from './demo/store';
+import {store, actionCreators} from './demo/store';
 import {set} from '#/src';
 import {
   prepare,
@@ -34,10 +34,10 @@ describe('Root', () => {
       conf = {
         fetchAndDispatch: function ({query, action, variables}) {
           if (query === rootOpts.init.query) {
-            return store.dispatch(action(actions)({posts: getPosts()}));
+            return store.dispatch(action(actionCreators)({posts: getPosts()}));
           }
           if (query === rootOpts.mutations.likeAll.query) {
-            return store.dispatch(action(actions)(null));
+            return store.dispatch(action(actionCreators)(null));
           }
         }
       };

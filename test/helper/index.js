@@ -1,4 +1,4 @@
-import {store, actions} from '../demo/store';
+import {store, actionCreators} from '../demo/store';
 import {
   set,
 } from '#/src';
@@ -9,5 +9,5 @@ export function prepare() {
 };
 
 export function resetStore() {
-  store.dispatch(actions.blog.reset());
+  store.dispatch(actionCreators.blog.reset());
 };
